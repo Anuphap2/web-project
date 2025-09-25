@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* Root variables (ถ้าอยากใช้ theme color แบบ custom) */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #000000;
+  --color-card: #f3f4f6; /* Tailwind gray-100 */
+}
+
+
+
+
+
+/* Global styles */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.card {
+  background-color: var(--color-card);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+}
