@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
-import Navbar from "../components/common/Navbar";
-import Footer from "../components/common/Footer";
-import Hero from "../components/common/Herosection";
+import Navbar from "../components/Layout/Navbar";
+import Footer from "../components/Layout/Footer";
+import Hero from "../components/Layout/Herosection";
 
 import type { Metadata } from "next";
 
@@ -11,10 +11,11 @@ export const metadata: Metadata = {
   icons: {
     // icon: "/favicon.ico",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -24,9 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}
-      >
+      <body className={`antialiased`}>
         <Navbar />
         <Hero />
         {children}

@@ -1,12 +1,13 @@
 export type CardProps = { // ประกาศชนิดข้อมูลสำหรับ Card component
     title: string;
-    content: string;
+    children?: React.ReactNode;
 };
 
 export type ModalProps = { // ประกาศชนิดข้อมูลสำหรับ Modal component
     title: string;
-    content: string;
+    isOpen: boolean;
     onClose: () => void;
+    children?: React.ReactNode;
 };
 
 export type ButtonProps = { // ประกาศชนิดข้อมูลสำหรับ Button component
@@ -14,3 +15,11 @@ export type ButtonProps = { // ประกาศชนิดข้อมูล�
     onClick: () => void;
 };
 
+export type ImageProps = { // ประกาศชนิดข้อมูลสำหรับ Image component
+    src: string;
+    alt: string;
+};
+
+export type SkeletonProps = { // ประกาศชนิดข้อมูลสำหรับ Skeleton component
+    className?: string;
+};

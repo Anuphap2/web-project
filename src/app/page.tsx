@@ -1,45 +1,122 @@
 "use client";
 import { useState } from "react";
-import Button from "@/components/UI/Button";
 import Card from "@/components/UI/Card";
+import Button from "@/components/UI/Button";
 import Modal from "@/components/UI/Modal";
+import Skeleton from "@/components/UI/Skeleton";
+import Image from "next/image";
 
-export default function App() {
-  const [showModal, setShowModal] = useState(false);
-  const [showModal2, setShowModal2] = useState(false);
+export default function UIDocs() {
+  const [activeModal, setActiveModal] = useState<string | null>(null);
   const [count, setCount] = useState(0);
 
   return (
-    <main className="container mx-auto p-4">
-      <h1>Hello World!</h1>
+    <main className="container mx-auto p-6 space-y-12">
+      {/* =======================
+          Header
+      ======================== */}
+      <header className="space-y-2">
+        <h1 className="text-3xl font-bold">UI Components Gallery</h1>
+        <p className="text-gray-600">
+          ตัวอย่างการใช้งาน Card, Button, Modal, Skeleton และ Image
+        </p>
+      </header>
 
-      <Card title="Card Title" content="This is a card component." />
-      <Card title="Card Title" content="This is a card component." />
-      <Card title="Card Title" content="This is a card component." />
+      {/* =======================
+          Card Section
+      ======================== */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Cards</h2>
 
-      <div className="my-4 space-x-2">
-        
+        <Card title="Example Card">
+          <p>This is an example of a card component.</p>
+        </Card>
 
-        <Button label="Open Modal" onClick={() => setShowModal(true)} />
-        <Button label="Open Modal2" onClick={() => setShowModal2(true)} />
-        <Button label={`Count: ${count}`} onClick={() => setCount(count + 1)} />
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i} title={`Card ${i + 1}`}>
+              <p>This is card content for card {i + 1}.</p>
+            </Card>
+          ))}
+        </div>
+      </section>
 
-      {/* Render modal เฉพาะเมื่อ showModal เป็น true */}
-      {showModal && (
+      {/* =======================
+          Button Section
+      ======================== */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Buttons</h2>
+        <div className="flex flex-wrap gap-2 items-center">
+          <Button
+            label="Open Modal 1"
+            onClick={() => setActiveModal("modal1")}
+          />
+          <Button
+            label="Open Modal 2"
+            onClick={() => setActiveModal("modal2")}
+          />
+          <Button
+            label={`Count: ${count}`}
+            onClick={() => setCount((prev) => prev + 1)}
+          />
+        </div>
+      </section>
+
+      {/* =======================
+          Skeleton Section
+      ======================== */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Skeletons</h2>
+        <div className="flex flex-col gap-2">
+          <Skeleton className="w-32 h-6" />
+          <Skeleton className="w-full h-48" />
+          <Skeleton className="w-[180px] h-[37px]" />
+        </div>
+      </section>
+
+      {/* =======================
+          Image Section
+      ======================== */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Images</h2>
+        <div className="w-48">
+          <Image src="/next.svg" alt="Next.js Logo" width={180} height={37} />
+        </div>
+      </section>
+
+      {/* =======================
+          Modals Section
+      ======================== */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Modals</h2>
+        <p>คลิกปุ่มเพื่อเปิด modal ตัวอย่าง</p>
+        <div className="flex gap-2">
+          <Button
+            label="Open Modal 1"
+            onClick={() => setActiveModal("modal1")}
+          />
+          <Button
+            label="Open Modal 2"
+            onClick={() => setActiveModal("modal2")}
+          />
+        </div>
+
         <Modal
-          title="Modal Title"
-          content="This is a modal component."
-          onClose={() => setShowModal(false)}
-        />
-      )}
-      {showModal2 && (
+          isOpen={activeModal === "modal1"}
+          title="Modal 1"
+          onClose={() => setActiveModal(null)}
+        >
+          <p>This is content for Modal 1.</p>
+        </Modal>
+
         <Modal
-          title="Modal Title2"
-          content="This is a modal component2."
-          onClose={() => setShowModal2(false)}
-        />
-      )}
+          isOpen={activeModal === "modal2"}
+          title="Modal 2"
+          onClose={() => setActiveModal(null)}
+        >
+          <p>This is content for Modal 2.</p>
+        </Modal>
+      </section>
     </main>
   );
 }
