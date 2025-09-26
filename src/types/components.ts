@@ -23,3 +23,11 @@ export type ImageProps = { // ประกาศชนิดข้อมูล�
 export type SkeletonProps = { // ประกาศชนิดข้อมูลสำหรับ Skeleton component
     className?: string;
 };
+
+export type ExampleBlockProps = { // ประกาศชนิดข้อมูลสำหรับ ExampleBlock component
+    title: string;
+    description?: string;
+    code: string;
+    children: React.ReactNode;
+};
+

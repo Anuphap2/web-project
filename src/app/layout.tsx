@@ -27,7 +27,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <Navbar />
-        <Hero />
+        <Hero
+          title="การใช้งาน Hero Section"
+          subtitle="ด้วย Tag Hero"
+          label="ดูเพิ่มเติม"
+          link="#features"
+        />
+
         {children}
         <Footer />
       </body>

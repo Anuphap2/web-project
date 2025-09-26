@@ -5,48 +5,50 @@ import Button from "@/components/UI/Button";
 import Modal from "@/components/UI/Modal";
 import Skeleton from "@/components/UI/Skeleton";
 import Image from "next/image";
+import ExampleBlock from "@/components/UI/ExampleCode";
+import Hero from "@/components/Layout/Herosection";
 
 export default function UIDocs() {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [count, setCount] = useState(0);
 
   return (
-    <main className="container mx-auto p-6 space-y-12">
-      {/* =======================
-          Header
-      ======================== */}
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold">UI Components Gallery</h1>
-        <p className="text-gray-600">
-          ตัวอย่างการใช้งาน Card, Button, Modal, Skeleton และ Image
-        </p>
-      </header>
+    <main className="container mx-auto px-4 space-y-12 py-8">
+      <div>
+        <ExampleBlock
+          title="Hero Section"
+          description="ใช้สําหรับแสดงหัวข้อหลักในหน้าเว็บไซต์"
+          code={`<Hero title="หัวข้อหลัก" subtitle="หัวข้อย่อย" label="ชื่อปุ่ม" link="ลิงค์" />`}
+        >
+          <Hero
+            title="UI Components Gallery"
+            subtitle="รวมตัวอย่างและเอกสารประกอบการใช้งานคอมโพเนนต์หลักที่ใช้ในโปรเจกต์"
+            label="ดูเพิ่มเติม"
+            link="#features"
+          />
+        </ExampleBlock>
+      </div>
 
-      {/* =======================
-          Card Section
-      ======================== */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Cards</h2>
-
+      {/* Card Example */}
+      <ExampleBlock
+        title="Card"
+        description="ใช้สำหรับแสดงข้อมูลในกล่องที่มี title และ content"
+        code={`<Card title="Example Card">
+  <p>This is an example of a card component.</p>
+</Card>`}
+      >
         <Card title="Example Card">
           <p>This is an example of a card component.</p>
         </Card>
+      </ExampleBlock>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Card key={i} title={`Card ${i + 1}`}>
-              <p>This is card content for card {i + 1}.</p>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* =======================
-          Button Section
-      ======================== */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Buttons</h2>
-        <div className="flex flex-wrap gap-2 items-center">
+      {/* Button Example */}
+      <ExampleBlock
+        title="Button"
+        description="ปุ่มกดที่รองรับ action ต่าง ๆ เช่น เปิด modal หรือเพิ่ม counter"
+        code={`<Button label="Click Me" onClick={handleClick} />`}
+      >
+        <div className="flex gap-2">
           <Button
             label="Open Modal 1"
             onClick={() => setActiveModal("modal1")}
@@ -57,39 +59,41 @@ export default function UIDocs() {
           />
           <Button
             label={`Count: ${count}`}
-            onClick={() => setCount((prev) => prev + 1)}
+            onClick={() => setCount((c) => c + 1)}
           />
         </div>
-      </section>
+      </ExampleBlock>
 
-      {/* =======================
-          Skeleton Section
-      ======================== */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Skeletons</h2>
+      {/* Skeleton Example */}
+      <ExampleBlock
+        title="Skeleton"
+        description="ใช้สำหรับแสดง placeholder ระหว่างโหลดข้อมูล"
+        code={`<Skeleton className="w-32 h-6" />`}
+      >
         <div className="flex flex-col gap-2">
           <Skeleton className="w-32 h-6" />
           <Skeleton className="w-full h-48" />
           <Skeleton className="w-[180px] h-[37px]" />
         </div>
-      </section>
+      </ExampleBlock>
 
-      {/* =======================
-          Image Section
-      ======================== */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Images</h2>
-        <div className="w-48">
-          <Image src="/next.svg" alt="Next.js Logo" width={180} height={37} />
-        </div>
-      </section>
+      {/* Image Example */}
+      <ExampleBlock
+        title="Image"
+        description="รูปภาพที่ optimized โดย Next.js Image component"
+        code={`<Image src="/next.svg" alt="Next.js Logo" width={180} height={37} />`}
+      >
+        <Image src="/next.svg" alt="Next.js Logo" width={180} height={37} />
+      </ExampleBlock>
 
-      {/* =======================
-          Modals Section
-      ======================== */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Modals</h2>
-        <p>คลิกปุ่มเพื่อเปิด modal ตัวอย่าง</p>
+      {/* Modal Example */}
+      <ExampleBlock
+        title="Modal"
+        description="กล่อง popup ที่โผล่มาด้านบนของหน้า ใช้สำหรับแจ้งเตือนหรือรับข้อมูล"
+        code={`<Modal isOpen={isOpen} title="Modal Title" onClose={closeFn}>
+  <p>Modal Content</p>
+</Modal>`}
+      >
         <div className="flex gap-2">
           <Button
             label="Open Modal 1"
@@ -116,7 +120,7 @@ export default function UIDocs() {
         >
           <p>This is content for Modal 2.</p>
         </Modal>
-      </section>
+      </ExampleBlock>
     </main>
   );
 }
