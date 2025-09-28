@@ -4,10 +4,12 @@ import { Task } from "@/types/task";
 
 export const exportTasksToExcel = (tasks: Task[]) => {
   const worksheetData = tasks.map((t) => ({
-    ID: t.id,
-    Title: t.title,
-    Description: t.description || "",
-    Status: t.status,
+    รหัสงาน: t.id,
+    หัวข้อ: t.title,
+    รายละเอียด: t.description || "",
+    สถานะการทำงาน: t.status,
+    ผู้ที่รับผิดชอบ: t.assignedTo || "ยังไม่ได้รับงาน",
+    สร้างโดย: t.createdBy,
     CreatedAt: new Date(t.createdAt).toLocaleString(),
     UpdatedAt: new Date(t.updatedAt).toLocaleString(),
   }));

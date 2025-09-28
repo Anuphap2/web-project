@@ -3,17 +3,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useTaskStore } from "@/store/taskStore";
-
-const taskSchema = z.object({
-  title: z.string().min(3, "ต้องมีอย่างน้อย 3 ตัวอักษร"),
-  description: z.string().optional(),
-  status: z.enum(["todo", "in-progress", "done"]), // เพิ่ม status validation
-});
+import { useUserStore } from "@/store/userStore";
+import { taskSchema } from "@/schema/taskSchema";
 
 type TaskFormData = z.infer<typeof taskSchema>;
 
 export default function TaskForm() {
   const addTask = useTaskStore((state) => state.addTask);
+  const username = useUserStore((state) => state.username);
+  const level = useUserStore((state) => state.level);
+  const department = useUserStore((state) => state.department);
+
   const {
     register,
     handleSubmit,
@@ -21,30 +21,28 @@ export default function TaskForm() {
     formState: { errors },
   } = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
-    defaultValues: { status: "todo" }, // default status
+    defaultValues: { status: "todo" },
   });
+
   const onSubmit = (data: TaskFormData) => {
-    // ดึง task ปัจจุบัน
-    const tasks = useTaskStore.getState().tasks;
+    if (level !== "manager")
+      return alert("You do not have permission to add tasks 😢");
 
-    // หาเลข id สูงสุด
-    const lastIdNumber = tasks
-      .map((t) => parseInt(t.id.replace("T", ""), 10))
-      .reduce((max, curr) => (curr > max ? curr : max), 0);
-
-    // สร้าง id ใหม่แบบ T001, T002 ...
     const task = {
-      id: `T${(lastIdNumber + 1).toString().padStart(3, "0")}`,
+      id: `T${Date.now()}`,
       title: data.title,
       description: data.description,
       status: data.status,
+      createdBy: username!,
+      assignedTo: data.assignedTo || undefined,
+      department: department!,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     addTask(task);
     reset();
-    alert("เพิ่มงานเรียบร้อย!");
+    alert("Task added successfully!");
   };
 
   return (
@@ -54,7 +52,7 @@ export default function TaskForm() {
     >
       <input
         {...register("title")}
-        placeholder="ชื่องาน"
+        placeholder="Task title"
         className="border p-2 rounded"
       />
       {errors.title && (
@@ -63,21 +61,32 @@ export default function TaskForm() {
 
       <textarea
         {...register("description")}
-        placeholder="รายละเอียดงาน"
+        placeholder="Task description"
         className="border p-2 rounded"
       />
 
       <label className="flex flex-col">
-        ระดับดำเนินการ:
+        Status:
         <select {...register("status")} className="border p-2 rounded mt-1">
-          <option value="todo">ยังไม่เสร็จ (To Do)</option>
-          <option value="in-progress">อยู่ระหว่างดำเนินการ</option>
-          <option value="done">เสร็จแล้ว</option>
+          <option value="todo">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
         </select>
       </label>
 
+      {level === "manager" && (
+        <label className="flex flex-col">
+          Assign to:
+          <input
+            {...register("assignedTo")}
+            placeholder="Employee username"
+            className="border p-2 rounded mt-1"
+          />
+        </label>
+      )}
+
       <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-2">
-        เพิ่มงาน
+        Add Task
       </button>
     </form>
   );

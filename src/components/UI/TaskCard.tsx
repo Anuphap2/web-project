@@ -1,7 +1,8 @@
 "use client";
 import { Task } from "@/types/task";
 import { useTaskStore } from "@/store/taskStore";
-import Card from "@/components/UI/Card";
+import { useUserStore } from "@/store/userStore";
+import Card from "./Card";
 import { useState } from "react";
 
 type Props = {
@@ -11,15 +12,31 @@ type Props = {
 export default function TaskCard({ task }: Props) {
   const deleteTask = useTaskStore((state) => state.deleteTask);
   const updateTask = useTaskStore((state) => state.updateTask);
+  const assignTask = useTaskStore((state) => state.assignTask);
+  const username = useUserStore((state) => state.username);
+  const level = useUserStore((state) => state.level);
 
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description || "");
   const [status, setStatus] = useState(task.status);
 
+  const isOwner = task.createdBy === username;
+  const isAssignee = task.assignedTo === username;
+
   const handleSave = () => {
-    updateTask({ ...task, title, description, status });
+    updateTask({
+      ...task,
+      title,
+      description,
+      status,
+      updatedAt: new Date().toISOString(),
+    });
     setIsEditing(false);
+  };
+
+  const handleAssign = () => {
+    if (username) assignTask(task.id, username);
   };
 
   return (
@@ -41,7 +58,6 @@ export default function TaskCard({ task }: Props) {
             value={status}
             onChange={(e) => setStatus(e.target.value as Task["status"])}
           >
-            <option value="todo">To Do</option>
             <option value="in-progress">In Progress</option>
             <option value="done">Done</option>
           </select>
@@ -64,23 +80,40 @@ export default function TaskCard({ task }: Props) {
         <div className="flex flex-col gap-2">
           {description && <p>{description}</p>}
           <p>สถานะ: {status}</p>
+          <p>ผู้รับงาน: {task.assignedTo || "ยังไม่มีใครรับงานนี้"}</p>
           <p className="text-xs text-gray-400">
             สร้างเมื่อ: {new Date(task.createdAt).toLocaleString()}
           </p>
-          <div className="flex gap-2 mt-2">
+
+          {level === "employee" && !task.assignedTo && (
             <button
-              onClick={() => setIsEditing(true)}
-              className="bg-yellow-500 cursor-pointer text-white px-3 py-1 rounded"
+              onClick={handleAssign}
+              className="bg-blue-500 text-white px-3 py-1 rounded mt-2"
             >
-              แก้ไข
+              รับงานนี้
             </button>
-            <button
-              onClick={() => deleteTask(task.id)}
-              className="bg-red-500 cursor-pointer text-white px-3 py-1 rounded"
-            >
-              ลบงาน
-            </button>
-          </div>
+          )}
+
+          {(isOwner || isAssignee) && (
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-yellow-500 text-white px-3 py-1 rounded"
+              >
+                แก้ไข
+              </button>
+
+              {/* ปุ่มลบเฉพาะ owner */}
+              {isOwner && (
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  ลบงาน
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </Card>
