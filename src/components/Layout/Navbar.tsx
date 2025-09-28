@@ -1,9 +1,20 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useUserStore } from "@/store/userStore";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const username = useUserStore((state) => state.username);
+  const logout = useUserStore((state) => state.logout);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout(); // เคลียร์ username ใน Zustand store
+    localStorage.removeItem("username"); // เคลียร์ localStorage
+    router.push("/login"); // ไปหน้า login
+  };
 
   return (
     <nav className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-sm transition-all duration-300 dark:bg-gray-950/80 dark:border-gray-800 border-b shadow-sm">
@@ -16,34 +27,43 @@ export default function Navbar() {
               </h1>
             </Link>
           </div>
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              <Link
-                href="#Home"
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
+
+          <div className="hidden md:flex items-center space-x-4">
+            <Link
+              href="#Home"
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              href="#Services"
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
+            >
+              Services
+            </Link>
+            <Link
+              href="#About"
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
+            >
+              About
+            </Link>
+            <Link
+              href="#Contact"
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
+            >
+              Contact
+            </Link>
+
+            {username && (
+              <button
+                onClick={handleLogout}
+                className="ml-4 bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors"
               >
-                Home
-              </Link>
-              <Link
-                href="#Services"
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
-              >
-                Services
-              </Link>
-              <Link
-                href="#About"
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="#Contact"
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md font-medium transition-colors"
-              >
-                Contact
-              </Link>
-            </div>
+                Logout
+              </button>
+            )}
           </div>
+
           {/* Mobile menu button */}
           <div className="-mr-2 flex md:hidden">
             <button
@@ -51,7 +71,7 @@ export default function Navbar() {
               type="button"
               className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
               aria-controls="mobile-menu"
-              aria-expanded="false"
+              aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
               {isMenuOpen ? (
@@ -120,6 +140,15 @@ export default function Navbar() {
             >
               Contact
             </Link>
+
+            {username && (
+              <button
+                onClick={handleLogout}
+                className="w-full bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 transition-colors"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       )}

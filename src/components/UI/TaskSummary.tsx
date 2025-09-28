@@ -1,14 +1,18 @@
 "use client";
 import { useTaskStore } from "@/store/taskStore";
+import { useUserStore } from "@/store/userStore";
 
 export default function TaskSummary() {
   const tasks = useTaskStore((state) => state.tasks);
+  const { department } = useUserStore();
 
-  const todoCount = tasks.filter((t) => t.status === "todo").length;
-  const inProgressCount = tasks.filter(
+  const deptTasks = tasks.filter((t) => t.department === department);
+
+  const todoCount = deptTasks.filter((t) => t.status === "todo").length;
+  const inProgressCount = deptTasks.filter(
     (t) => t.status === "in-progress"
   ).length;
-  const doneCount = tasks.filter((t) => t.status === "done").length;
+  const doneCount = deptTasks.filter((t) => t.status === "done").length;
 
   return (
     <div className="flex gap-4 mb-4">
