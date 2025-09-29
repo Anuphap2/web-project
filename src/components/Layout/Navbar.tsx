@@ -19,8 +19,7 @@ export default function Navbar() {
         ...(level === "manager"
           ? [
               { label: "Dashboard", href: "/dashboard" },
-              { label: "Tasks", href: "/tasks" },
-              { label: "Export Excel", href: "/export" },
+              // { label: "Tasks", href: "/tasks" },
             ]
           : [
               { label: "Home", href: "/home" },
