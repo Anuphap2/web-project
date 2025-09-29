@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: light --default;
@@ -11,9 +13,12 @@
 }
 
 /* Global styles */
-* {
+
+html {
+  font-family: "Noto Sans Thai", sans-serif;
   scroll-behavior: smooth;
 }
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);

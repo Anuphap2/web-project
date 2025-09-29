@@ -29,15 +29,33 @@ export const useUserStore = create<UserStore>()(
       department: null,
 
       login: (username, password, level, department) => {
-        // เก็บ user ปัจจุบันลง list ก่อน
-        useUserListStore.getState().addUser({ username, password, level, department });
-        // set user ปัจจุบัน
+        // ถ้าเป็น boss → บังคับค่าให้ตายตัว
+        if (username === "boss" && password === "1234") {
+          set({
+            username: "boss",
+            password: "1234",
+            level: "manager",
+            department: "HR",
+          });
+          return;
+        }
+
+        // เก็บ user ปกติลง list ก่อน
+        useUserListStore
+          .getState()
+          .addUser({ username, password, level, department });
+
+        // set user ปกติ
         set({ username, password, level, department });
       },
 
       logout: () => {
-        // เคลียร์ user ปัจจุบัน แต่ user list ยังคงอยู่
-        set({ username: null, password: null, level: null, department: null });
+        set({
+          username: null,
+          password: null,
+          level: null,
+          department: null,
+        });
       },
     }),
     { name: "user-storage" }

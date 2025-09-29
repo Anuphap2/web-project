@@ -7,46 +7,46 @@ import "react-toastify/dist/ReactToastify.css"; // เพิ่ม CSS ของ
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Task Management",
-    description: "Your simple and effective task management system.",
-    icons: {
-        // icon: "/favicon.ico",
-    },
+  title: "Task Management",
+  description: "Your simple and effective task management system.",
+  icons: {
+    // icon: "/favicon.ico",
+  },
 };
 
 export const viewport = {
-    width: "device-width",
-    initialScale: 1,
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en" data-theme="light"> 
-            <body className={`antialiased`}>
-                <Navbar />
-                {children}
-                <Footer />
-                
-                {/* *** เพิ่ม ToastContainer ตรงนี้ ***
+  return (
+    <html lang="en" data-theme="light" data-scroll-behavior="smooth">
+      <body className={`antialiased`}>
+        <Navbar />
+        {children}
+        <Footer />
+
+        {/* *** เพิ่ม ToastContainer ตรงนี้ ***
                   เพื่อให้ Toast แสดงผลได้ทั่วทั้งแอปพลิเคชัน 
                 */}
-                <ToastContainer 
-                  position="top-right" 
-                  autoClose={3000} 
-                  hideProgressBar={false} 
-                  newestOnTop={false} 
-                  closeOnClick 
-                  rtl={false} 
-                  pauseOnFocusLoss 
-                  draggable 
-                  pauseOnHover 
-                  theme="colored" 
-                />
-            </body>
-        </html>
-    );
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      </body>
+    </html>
+  );
 }

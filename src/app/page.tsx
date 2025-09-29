@@ -22,7 +22,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
       <div className="w-full max-w-md rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl p-8 space-y-6">
         <h2 className="text-3xl font-extrabold text-center text-gray-800">
-          Welcome Back
+          Welcome
         </h2>
 
         {/* Username Input */}
