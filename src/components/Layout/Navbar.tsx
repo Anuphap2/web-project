@@ -12,8 +12,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout(); // เคลียร์ username ใน Zustand store
-    localStorage.removeItem("username"); // เคลียร์ localStorage
-    router.push("/login"); // ไปหน้า login
+    router.push("/"); // ไปหน้า login
   };
 
   return (
