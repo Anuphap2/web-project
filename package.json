@@ -9,14 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "gsap": "^3.13.0",
-    "next": "15.5.4",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
-=======
     "@hookform/resolvers": "^5.2.2",
     "file-saver": "^2.0.5",
+    "gsap": "^3.13.0",
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -24,15 +19,11 @@
     "xlsx": "^0.18.5",
     "zod": "^4.1.11",
     "zustand": "^5.0.8"
->>>>>>> 27a7b09e9e3d8d264408369f8a4d114adbdbf523
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-<<<<<<< HEAD
-=======
     "@types/file-saver": "^2.0.7",
->>>>>>> 27a7b09e9e3d8d264408369f8a4d114adbdbf523
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

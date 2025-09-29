@@ -9,8 +9,7 @@ const departments = ["HR", "IT", "Finance"];
 
 export default function LoginPage() {
   const router = useRouter();
-  const login = useUserStore((state) => state.login);
-
+  const login = useUserStore((state: { login: (username: string, password: string, level: "manager" | "employee", department: string) => void }) => state.login);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [level, setLevel] = useState<"manager" | "employee">("employee");
