@@ -17,26 +17,36 @@ export default function Navbar() {
 
   if (!username) return null;
 
-  const navLinks = level === "manager" ? (
-    <li>
-      <Link href="/dashboard" className="hover:text-indigo-600 transition-colors">
-        Dashboard
-      </Link>
-    </li>
-  ) : (
-    <>
+  const navLinks =
+    level === "manager" ? (
       <li>
-        <Link href="/home" className="hover:text-indigo-600 transition-colors">
-          Home
+        <Link
+          href="/dashboard"
+          className="hover:text-indigo-600 transition-colors"
+        >
+          Dashboard
         </Link>
       </li>
-      <li>
-        <Link href="/tasks" className="hover:text-indigo-600 transition-colors">
-          My Tasks
-        </Link>
-      </li>
-    </>
-  );
+    ) : (
+      <>
+        <li>
+          <Link
+            href="/home"
+            className="hover:text-indigo-600 transition-colors"
+          >
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/tasks"
+            className="hover:text-indigo-600 transition-colors"
+          >
+            My Tasks
+          </Link>
+        </li>
+      </>
+    );
 
   return (
     <nav className="sticky top-0 z-50 bg-base-100 shadow-md backdrop-blur-md px-4 sm:px-6 lg:px-8 transition-shadow">
@@ -48,7 +58,11 @@ export default function Navbar() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden btn btn-ghost btn-circle"
           >
-            {isMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
+            {isMenuOpen ? (
+              <FaTimes className="w-5 h-5" />
+            ) : (
+              <FaBars className="w-5 h-5" />
+            )}
           </button>
 
           {/* Logo */}
@@ -63,7 +77,9 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex space-x-6">
-          <ul className="menu menu-horizontal px-1 flex space-x-4">{navLinks}</ul>
+          <ul className="menu menu-horizontal px-1 flex space-x-4">
+            {navLinks}
+          </ul>
         </div>
 
         {/* Desktop User Info */}
@@ -71,7 +87,10 @@ export default function Navbar() {
           <span className="text-sm font-medium text-gray-700">
             Hi, {username} ({level})
           </span>
-          <button onClick={handleLogout} className="btn btn-error btn-sm rounded-full">
+          <button
+            onClick={handleLogout}
+            className="btn btn-error btn-sm rounded-full"
+          >
             Logout
           </button>
         </div>
@@ -85,7 +104,10 @@ export default function Navbar() {
             <span className="text-sm font-medium text-gray-700">
               Hi, {username} ({level})
             </span>
-            <button onClick={handleLogout} className="btn btn-error w-full rounded-lg">
+            <button
+              onClick={handleLogout}
+              className="btn btn-error w-full rounded-lg"
+            >
               Logout
             </button>
           </div>

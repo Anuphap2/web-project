@@ -189,7 +189,7 @@ export default function Tasks({ tasks }: TaskListProps) {
                         onClick={() => handleDeleteTask(task)}
                         className="btn btn-ghost btn-sm gap-1 text-error hover:bg-error/10 hover:text-error"
                       >
-                        <FaTrashAlt /> Delete
+                        <FaTrashAlt />
                       </Button>
                     </>
                   )
