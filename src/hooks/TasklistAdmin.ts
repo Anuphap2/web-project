@@ -22,12 +22,23 @@ export function useTaskListAll(tasks: Task[]) {
     });
   };
 
-  const saveEdit = (task: Task, title: string, description: string, status: Task["status"]) => {
+  const saveEdit = (params: {
+    task: Task;
+    title?: string;
+    description?: string;
+    status?: Task["status"];
+    assignees?: string[];
+    maxAssignees?: number;
+  }) => {
+    const { task, title, description, status, assignees, maxAssignees } = params;
+
     updateTask({
       ...task,
-      title,
-      description,
-      status,
+      title: title ?? task.title,
+      description: description ?? task.description,
+      status: status ?? task.status,
+      assignees: assignees ?? task.assignees,
+      maxAssignees: maxAssignees ?? task.maxAssignees,
       updatedAt: new Date().toISOString(),
     });
   };
@@ -56,3 +67,4 @@ export function useTaskListAll(tasks: Task[]) {
     removeTask,
   };
 }
+
