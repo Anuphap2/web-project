@@ -7,6 +7,12 @@ export type User = {
   department: string;
 };
 
+export type UserDataTable = {
+  username: string;
+  level: string;
+  department: string;
+}
+
 export type UserStore = {
   username: string | null;
   password: string | null;

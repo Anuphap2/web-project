@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
 
 /* Root variables (ถ้าอยากใช้ theme color แบบ custom) */
 :root {
