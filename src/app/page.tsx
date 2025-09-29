@@ -1,78 +1,90 @@
-"use client"; // บังคับให้ component นี้เป็น client
-
-import { useState } from "react";
-import { useRouter } from "next/navigation"; // App Router ใช้จาก next/navigation
-import { useUserStore } from "@/store/userStore";
+"use client";
+import { useLoginForm } from "@/hooks/useLoginForm";
 import Button from "@/components/UI/Button";
 
-const departments = ["HR", "IT", "Finance"];
-
 export default function LoginPage() {
-  const router = useRouter();
-  const login = useUserStore((state) => state.login);
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [level, setLevel] = useState<"manager" | "employee">("employee");
-  const [department, setDepartment] = useState(departments[0]);
-
-  const handleLogin = () => {
-    if (!username || !password) {
-      alert("กรุณากรอก username และ password");
-      return;
-    }
-
-    login(username, password, level, department);
-
-    if (level === "manager") {
-      router.push("dashboard"); // redirect ไปหน้า home
-    } else {
-      router.push("home"); // redirect ไปหน้า home
-    }
-  };
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    level,
+    setLevel,
+    department,
+    setDepartment,
+    departments,
+    handleLogin,
+  } = useLoginForm();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg space-y-4">
-        <h2 className="text-2xl font-bold text-center">Login</h2>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl space-y-6">
+        <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
 
+        {/* Username Input */}
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full rounded border p-2"
+          className="w-full rounded-lg border border-gray-300 p-3 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
 
+        {/* Password Input */}
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded border p-2"
+          className="w-full rounded-lg border border-gray-300 p-3 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
 
-        <select
-          value={level}
-          onChange={(e) => setLevel(e.target.value as "manager" | "employee")}
-          className="w-full rounded border p-2"
-        >
-          <option value="manager">Manager</option>
-          <option value="employee">Employee</option>
-        </select>
+        {/* Level Select */}
+        <div className="relative">
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value as "manager" | "employee")}
+            className="w-full rounded-lg border border-gray-300 p-3 appearance-none transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="manager">Manager</option>
+            <option value="employee">Employee</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg
+              className="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
+        </div>
 
-        <select
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-          className="w-full rounded border p-2"
-        >
-          {departments.map((dep) => (
-            <option key={dep} value={dep}>
-              {dep}
-            </option>
-          ))}
-        </select>
+        {/* Department Select */}
+        <div className="relative">
+          <select
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 p-3 appearance-none transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            {departments.map((dep) => (
+              <option key={dep} value={dep}>
+                {dep}
+              </option>
+            ))}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg
+              className="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
+        </div>
 
+        {/* Login Button */}
         <Button label="Login" onClick={handleLogin} />
       </div>
     </div>
