@@ -1,7 +1,7 @@
 "use client";
 import { useUserStore } from "@/store/userStore";
 import { useTaskStore } from "@/store/Tasks/taskStore";
-import TaskList from "@/components/UI/Tasks/TaskCard";
+import TaskCard from "@/components/UI/Tasks/TaskCard";
 
 export default function HomePage() {
   const { username, level, department } = useUserStore();
@@ -18,8 +18,10 @@ export default function HomePage() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-semibold mb-2">Tasks in your department</h2>
-        <TaskList tasks={departmentTasks} />
+        <h2 className="text-2xl font-semibold mb-2">
+          Tasks in your department
+        </h2>
+        <TaskCard tasks={departmentTasks} />
       </div>
     </div>
   );
