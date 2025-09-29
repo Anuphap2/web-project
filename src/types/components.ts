@@ -24,10 +24,4 @@ export type SkeletonProps = { // ประกาศชนิดข้อมู�
     className?: string;
 };
 
-export type ExampleBlockProps = { // ประกาศชนิดข้อมูลสำหรับ ExampleBlock component
-    title: string;
-    description?: string;
-    code: string;
-    children: React.ReactNode;
-};
 

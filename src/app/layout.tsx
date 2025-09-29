@@ -1,12 +1,11 @@
 import "@/styles/globals.css";
-import Navbar from "../components/Layout/Navbar";
-import Footer from "../components/Layout/Footer";
-import Hero from "../components/Layout/Herosection";
+import Navbar from "@/components/Layout/Navbar";
+import Footer from "@/components/Layout/Footer";
 
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Web Project",
+  title: "Task Management",
   description: "",
   icons: {
     // icon: "/favicon.ico",
@@ -27,12 +26,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <Navbar />
-        <Hero
+        {/* <Hero
           title="การใช้งาน Hero Section"
           subtitle="ด้วย Tag Hero"
           label="ดูเพิ่มเติม"
           link="#features"
-        />
+        /> */}
 
         {children}
         <Footer />
