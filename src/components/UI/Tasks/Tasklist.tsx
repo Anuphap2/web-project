@@ -89,6 +89,7 @@ export default function Tasklist({ tasks }: TaskTableProps) {
               <th className="px-4 py-2 text-left">Description</th>
               <th className="px-4 py-2 text-left">Status</th>
               <th className="px-4 py-2 text-left">Assignees</th>
+              <th className="px-4 py-2 text-left">EndDate At</th>
               <th className="px-4 py-2 text-left">Updated At</th>
               <th className="px-4 py-2 text-center">Actions</th>
             </tr>
@@ -105,6 +106,11 @@ export default function Tasklist({ tasks }: TaskTableProps) {
                   <td className="px-4 py-2">{task.status}</td>
                   <td className="px-4 py-2">
                     {(task.assignees || []).join(", ")}
+                  </td>
+                  <td className="px-4 py-2">
+                    {task.dateEnd
+                      ? new Date(task.dateEnd).toLocaleDateString()
+                      : "-"}
                   </td>
                   <td className="px-4 py-2">
                     {new Date(task.updatedAt).toLocaleString()}

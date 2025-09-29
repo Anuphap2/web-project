@@ -11,7 +11,8 @@ export default function AddTaskForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [assignedTo, setAssignedTo] = useState<string | "">("");
-  const [maxAssignees, setMaxAssignees] = useState(1); // จำนวนคนสูงสุด
+  const [maxAssignees, setMaxAssignees] = useState(1); 
+  const [dueDate, setDueDate] = useState(""); // เพิ่ม field วันที่สิ้นสุด
 
   const departmentUsers = users.filter((u) => u.department === department);
 
@@ -26,8 +27,9 @@ export default function AddTaskForm() {
       createdBy: username!,
       department: department!,
       assignedTo: assignedTo || undefined,
-      maxAssignees, // เพิ่ม field
-      assignees: assignedTo ? [assignedTo] : [], // รายชื่อคนที่รับงาน
+      maxAssignees,
+      assignees: assignedTo ? [assignedTo] : [],
+      dateEnd: dueDate || undefined, // เพิ่มวันที่สิ้นสุด
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
@@ -36,6 +38,7 @@ export default function AddTaskForm() {
     setDescription("");
     setAssignedTo("");
     setMaxAssignees(1);
+    setDueDate("");
   };
 
   return (
@@ -75,6 +78,14 @@ export default function AddTaskForm() {
         onChange={(e) => setMaxAssignees(Number(e.target.value))}
         className="w-full border rounded p-2"
         placeholder="Max assignees"
+      />
+
+      <input
+        type="date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+        className="w-full border rounded p-2"
+        placeholder="Due date"
       />
 
       <button

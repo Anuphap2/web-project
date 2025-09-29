@@ -5,9 +5,10 @@ import AddTaskForm from "@/components/UI/Tasks/TaskForm";
 import TaskList from "@/components/UI/Tasks/Tasklist";
 import DepartmentUserList from "@/components/UI/users/fetchUser";
 import TaskSummary from "@/components/UI/Tasks/TaskSummary";
+import ExportButton from "@/components/UI/ExportButton";
 
 export default function HomePage() {
-  const { department } = useUserStore();
+  const { username, department } = useUserStore();
   const tasks = useTaskStore((state) => state.tasks);
 
   // filter เฉพาะงานในแผนกของ user
@@ -15,7 +16,11 @@ export default function HomePage() {
 
   return (
     <div className="p-8 space-y-8">
-      <h1 className="text-3xl font-bold">Manager Dashboard</h1>
+      <h1 className="text-3xl font-bold">
+        Manager {username} {department} Dashboard
+      </h1>
+
+      <ExportButton />
 
       {/* 1. Task Summary */}
       <section>
