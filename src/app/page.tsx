@@ -1,5 +1,6 @@
 "use client";
 import { useLoginForm } from "@/hooks/useLoginForm";
+import { FaUser, FaLock } from "react-icons/fa";
 import Button from "@/components/UI/Button";
 
 export default function LoginPage() {
@@ -18,75 +19,69 @@ export default function LoginPage() {
 
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl space-y-6">
-        <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
+      <div className="w-full max-w-md rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl p-8 space-y-6">
+        <h2 className="text-3xl font-extrabold text-center text-gray-800">
+          Welcome Back
+        </h2>
 
         {/* Username Input */}
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 p-3 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <FaUser />
+          </span>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="input input-bordered w-full pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          />
+        </div>
 
         {/* Password Input */}
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 p-3 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <FaLock />
+          </span>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input input-bordered w-full pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          />
+        </div>
 
         {/* Level Select */}
-        <div className="relative">
-          <select
-            value={level}
-            onChange={(e) => setLevel(e.target.value as "manager" | "employee")}
-            className="w-full rounded-lg border border-gray-300 p-3 appearance-none transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="manager">Manager</option>
-            <option value="employee">Employee</option>
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <svg
-              className="fill-current h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
-        </div>
+        <select
+          value={level}
+          onChange={(e) => setLevel(e.target.value as "manager" | "employee")}
+          className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+        >
+          <option value="manager">Manager</option>
+          <option value="employee">Employee</option>
+        </select>
 
         {/* Department Select */}
-        <div className="relative">
-          <select
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 p-3 appearance-none transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            {departments.map((dep) => (
-              <option key={dep} value={dep}>
-                {dep}
-              </option>
-            ))}
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <svg
-              className="fill-current h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
-        </div>
+        <select
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+          className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+        >
+          {departments.map((dep) => (
+            <option key={dep} value={dep}>
+              {dep}
+            </option>
+          ))}
+        </select>
 
         {/* Login Button */}
-        <Button label="Login" onClick={handleLogin} />
+        <Button
+          label="Login"
+          onClick={handleLogin}
+          className="btn btn-primary w-full text-lg font-semibold hover:scale-105 transition-transform duration-200"
+        />
       </div>
     </div>
   );

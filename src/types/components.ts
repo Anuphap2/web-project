@@ -1,5 +1,6 @@
 export type CardProps = { // ประกาศชนิดข้อมูลสำหรับ Card component
-    title: string;
+    title?: string;
+    className?: string;
     children?: React.ReactNode;
 };
 

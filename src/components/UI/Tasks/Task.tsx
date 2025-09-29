@@ -2,7 +2,13 @@
 import Button from "@/components/UI/Button";
 import { useGetNewTasks } from "@/hooks/Task";
 import { Task } from "@/types/task";
-import { FaEdit, FaTrashAlt, FaSave, FaBan, FaCheckCircle } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrashAlt,
+  FaSave,
+  FaBan,
+  FaCheckCircle,
+} from "react-icons/fa";
 import { BiTask } from "react-icons/bi";
 
 type TaskListProps = {
@@ -29,14 +35,19 @@ export default function Tasks({ tasks }: TaskListProps) {
   } = useGetNewTasks(tasks);
 
   if (!username) return null;
-  if (visibleTasks.length === 0) return (
-    <div className="flex items-center justify-center p-8 bg-white rounded-lg shadow-md">
-      <p className="text-gray-500 text-lg">
-        <FaCheckCircle className="inline-block mr-2 text-green-500" />
-        ไม่มีงานใหม่ให้แสดงตอนนี้
-      </p>
-    </div>
-  );
+
+  if (visibleTasks.length === 0)
+    return (
+      <div className="flex flex-col items-center justify-center p-10 bg-base-100 rounded-xl shadow-lg border border-base-200 text-center">
+        <FaCheckCircle className="text-5xl text-success mb-4" />
+        <p className="text-xl font-semibold text-gray-700 mb-1">
+          ไม่มีงานใหม่ให้แสดง
+        </p>
+        <p className="text-gray-500">
+          คุณสามารถสร้างงานใหม่ หรือรอการมอบหมายงานได้
+        </p>
+      </div>
+    );
 
   const getStatusColor = (status: Task["status"]) => {
     switch (status) {
@@ -46,12 +57,12 @@ export default function Tasks({ tasks }: TaskListProps) {
         return "bg-green-100 text-green-800";
       case "No Assignee":
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-blue-100 text-blue-800";
     }
   };
 
   return (
-    <ul className="space-y-4">
+    <ul className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
       {visibleTasks.map((task) => {
         const isEditing = editingTaskId === task.id;
         const assignees = task.assignees || [];
@@ -60,23 +71,27 @@ export default function Tasks({ tasks }: TaskListProps) {
         return (
           <li
             key={task.id}
-            className="border-none rounded-lg p-6 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row justify-between items-start md:items-center"
+            className="card bg-base-100 shadow-md hover:shadow-2xl transition-shadow duration-300 border border-base-200 rounded-xl flex flex-col"
           >
-            <div className="flex-1 space-y-2">
+            <div className="card-body flex-1 flex flex-col p-5 gap-4">
+              {/* Header */}
               {isEditing ? (
                 <div className="flex flex-col gap-3">
                   <input
-                    className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    type="text"
+                    placeholder="หัวข้อ"
+                    className="input input-bordered input-lg w-full"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
                   />
                   <textarea
-                    className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    placeholder="รายละเอียด"
+                    className="textarea textarea-bordered h-24 w-full"
                     value={editDescription}
                     onChange={(e) => setEditDescription(e.target.value)}
                   />
                   <select
-                    className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    className="select select-bordered w-full"
                     value={editStatus}
                     onChange={(e) =>
                       setEditStatus(e.target.value as Task["status"])
@@ -88,70 +103,108 @@ export default function Tasks({ tasks }: TaskListProps) {
                   </select>
                 </div>
               ) : (
-                <div className="flex flex-col gap-1">
-                  <h3 className="text-xl font-bold text-gray-800 flex items-center">
-                    <BiTask className="mr-2 text-blue-500" />
-                    {task.title}
-                  </h3>
-                  {task.description && <p className="text-gray-600">{task.description}</p>}
-                  <span
-                    className={`inline-block text-sm font-semibold rounded-full px-3 py-1 mt-2 ${getStatusColor(task.status)}`}
-                  >
-                    {task.status}
-                  </span>
-                  <p className="text-sm text-gray-500 mt-1">Assigned to: {assignees.join(", ") || "Unassigned"}</p>
-                </div>
-              )}
-            </div>
+                <>
+                  <div className="flex justify-between items-start flex-wrap gap-2">
+                    <h3 className="card-title text-2xl font-bold flex items-center gap-2">
+                      <BiTask className="text-primary text-2xl" />
+                      {task.title}
+                    </h3>
+                    <span
+                      className={`px-3 py-1 rounded-full font-semibold text-sm ${getStatusColor(
+                        task.status
+                      )}`}
+                    >
+                      {task.status}
+                    </span>
+                  </div>
 
-            <div className="mt-4 md:mt-0 md:ml-6 flex flex-wrap gap-2 justify-end">
-              {level === "manager" ? (
-                isEditing ? (
-                  <>
-                    <Button
-                      label="Save"
-                      onClick={() => saveTask(task)}
-                      className="bg-green-500 text-white hover:bg-green-600 transition-colors"
-                    >
-                      <FaSave />
-                    </Button>
-                    <Button
-                      label="Cancel"
-                      onClick={cancelEditing}
-                      className="bg-red-500 text-white hover:bg-red-600 transition-colors"
-                    >
-                      <FaBan />
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      label="Edit"
-                      onClick={() => startEditing(task)}
-                      className="bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-                    >
-                      <FaEdit />
-                    </Button>
-                    <Button
-                      label="Delete"
-                      onClick={() => handleDeleteTask(task)}
-                      className="bg-gray-500 text-white hover:bg-gray-600 transition-colors"
-                    >
-                      <FaTrashAlt />
-                    </Button>
-                  </>
-                )
-              ) : (
-                !isAssigned && (
-                  <Button
-                    label="Claim Task"
-                    onClick={() => handleClaimTask(task)}
-                    className="bg-purple-500 text-white hover:bg-purple-600 transition-colors"
-                  >
-                    Claim Task
-                  </Button>
-                )
+                  {task.description && (
+                    <p className="text-gray-600 leading-relaxed line-clamp-3">
+                      {task.description}
+                    </p>
+                  )}
+                  {task.dateEnd && (
+                    <p className="text-gray-500 text-sm">
+                      สิ้นสุดวันที่: {task.dateEnd}
+                    </p>
+                  )}
+
+                  {task.maxAssignees && (
+                    <p className="text-gray-600 leading-relaxed line-clamp-3">
+                      จำนวนผู้รับผิดชอบ: {task.maxAssignees} คน
+                    </p>
+                  )}
+
+                  {/* Assignees */}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {assignees.length > 0 ? (
+                      assignees.map((a) => (
+                        <span
+                          key={a}
+                          className="badge badge-sm badge-outline text-gray-700"
+                        >
+                          {a}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="badge badge-sm badge-outline text-gray-500">
+                        Unassigned
+                      </span>
+                    )}
+                  </div>
+                </>
               )}
+
+              {/* Action Buttons */}
+              <div className="card-actions mt-auto justify-end flex-wrap gap-2 border-t border-base-200 pt-3">
+                {level === "manager" ? (
+                  isEditing ? (
+                    <>
+                      <Button
+                        label="Save"
+                        onClick={() => saveTask(task)}
+                        className="btn btn-success btn-sm gap-1 hover:scale-105 transition-transform"
+                      >
+                        <FaSave /> Save
+                      </Button>
+                      <Button
+                        label="Cancel"
+                        onClick={cancelEditing}
+                        className="btn btn-error btn-sm gap-1 hover:scale-105 transition-transform"
+                      >
+                        <FaBan /> Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        label="Edit"
+                        onClick={() => startEditing(task)}
+                        className="btn btn-primary btn-sm gap-1 hover:scale-105 transition-transform"
+                      >
+                        <FaEdit /> Edit
+                      </Button>
+                      <Button
+                        label="Delete"
+                        onClick={() => handleDeleteTask(task)}
+                        className="btn btn-ghost btn-sm gap-1 text-error hover:bg-error/10 hover:text-error"
+                      >
+                        <FaTrashAlt /> Delete
+                      </Button>
+                    </>
+                  )
+                ) : (
+                  !isAssigned && (
+                    <Button
+                      label="Claim Task"
+                      onClick={() => handleClaimTask(task)}
+                      className="btn btn-secondary btn-sm gap-1 w-full hover:scale-105 transition-transform"
+                    >
+                      <BiTask /> Claim Task
+                    </Button>
+                  )
+                )}
+              </div>
             </div>
           </li>
         );

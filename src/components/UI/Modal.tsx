@@ -6,24 +6,27 @@ export default function Modal({
   onClose,
   children,
 }: ModalProps) {
-  if (!isOpen) return null;
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-70 backdrop-blur-sm transition-opacity duration-300"
-      onClick={onClose} // คลิก backdrop จะปิด
-    >
-      <div
-        className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl transition-transform duration-300 ease-in-out transform scale-95"
-        onClick={(e) => e.stopPropagation()} // ป้องกันคลิกใน modal ปิด
-      >
+    <div className={isOpen ? "modal modal-open" : "modal"}>
+      <div className="modal-box relative">
         {/* ปุ่มปิด Modal */}
-        <button onClick={onClose} className="absolute top-4 right-4 ...">
-          X
+        <button
+          className="btn btn-sm btn-circle absolute right-2 top-2"
+          onClick={onClose}
+        >
+          ✕
         </button>
 
-        <h2 className="text-2xl font-bold mb-4">{title}</h2>
-        <div className="text-gray-700 mb-6">{children}</div>
+        <h3 className="font-bold text-lg mb-4">{title}</h3>
+
+        <div className="mb-4">{children}</div>
+
+        {/* Footer optional */}
+        <div className="modal-action">
+          <button className="btn btn-primary" onClick={onClose}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );
