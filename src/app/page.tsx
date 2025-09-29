@@ -1,84 +1,80 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useTaskStore } from "@/store/taskStore";
+"use client"; // บังคับให้ component นี้เป็น client
+
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // App Router ใช้จาก next/navigation
 import { useUserStore } from "@/store/userStore";
-import TaskForm from "@/components/UI/TaskForm";
-import TaskCard from "@/components/UI/TaskCard";
-import TaskSummary from "@/components/UI/TaskSummary";
-import ExportButton from "@/components/UI/ExportButton"; // import ปุ่ม export
+import Button from "@/components/UI/Button";
 
-export default function App() {
-  const { tasks, loadTasks } = useTaskStore();
-  const { username, level, department, login } = useUserStore();
+const departments = ["HR", "IT", "Finance"];
+
+export default function LoginPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const login = useUserStore((state) => state.login);
 
-  useEffect(() => {
-    const savedUsername = localStorage.getItem("username");
-    const savedPassword = localStorage.getItem("password");
-    const savedLevel = localStorage.getItem("level") as
-      | "manager"
-      | "employee"
-      | null;
-    const savedDepartment = localStorage.getItem("department");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [level, setLevel] = useState<"manager" | "employee">("employee");
+  const [department, setDepartment] = useState(departments[0]);
 
-    if (savedUsername && savedPassword && savedLevel && savedDepartment) {
-      login(savedUsername, savedPassword, savedLevel, savedDepartment);
-    } else {
-      router.push("/login");
+  const handleLogin = () => {
+    if (!username || !password) {
+      alert("กรุณากรอก username และ password");
+      return;
     }
 
-    loadTasks();
-    setLoading(false);
-  }, [login, router, loadTasks]);
+    login(username, password, level, department);
 
-  if (!username || !level || loading) return null;
-
-  // filter tasks ตาม role
-  const visibleTasks =
-    level === "manager"
-      ? tasks.filter((t) => t.department === department)
-      : tasks.filter(
-          (t) =>
-            t.department === department &&
-            (t.createdBy === username ||
-              t.assignedTo === username ||
-              !t.assignedTo)
-        );
+    if (level === "manager") {
+      router.push("dashboard"); // redirect ไปหน้า home
+    } else {
+      router.push("home"); // redirect ไปหน้า home
+    }
+  };
 
   return (
-    <main className="container mx-auto px-4 py-12 max-w-4xl">
-      <header className="flex justify-between items-center mb-10 flex-col md:flex-row md:items-center gap-2">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-600">
-            {level} ({department}) | สวัสดี, {username} 👋
-          </h2>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            จัดการงานของคุณ 🚀
-          </h1>
-        </div>
-        {/* เพิ่มตรงนี้ */}
-        {level === "manager" && <ExportButton />}
-      </header>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg space-y-4">
+        <h2 className="text-2xl font-bold text-center">Login</h2>
 
-      <section className="space-y-8">
-        <TaskSummary />
-        {level === "manager" && <TaskForm />}
-      </section>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full rounded border p-2"
+        />
 
-      <section className="mt-12">
-        <h2 className="text-2xl font-bold text-gray-800">รายการงานทั้งหมด</h2>
-        <div className="grid gap-4">
-          {visibleTasks.length === 0 ? (
-            <div className="bg-white p-6 rounded-xl text-center text-gray-500 shadow-sm border border-dashed border-gray-300">
-              🎉 ไม่มีงานสำหรับคุณ
-            </div>
-          ) : (
-            visibleTasks.map((task) => <TaskCard key={task.id} task={task} />)
-          )}
-        </div>
-      </section>
-    </main>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full rounded border p-2"
+        />
+
+        <select
+          value={level}
+          onChange={(e) => setLevel(e.target.value as "manager" | "employee")}
+          className="w-full rounded border p-2"
+        >
+          <option value="manager">Manager</option>
+          <option value="employee">Employee</option>
+        </select>
+
+        <select
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+          className="w-full rounded border p-2"
+        >
+          {departments.map((dep) => (
+            <option key={dep} value={dep}>
+              {dep}
+            </option>
+          ))}
+        </select>
+
+        <Button label="Login" onClick={handleLogin} />
+      </div>
+    </div>
   );
 }

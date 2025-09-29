@@ -10,7 +10,7 @@ export default function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center  bg-opacity-70 backdrop-blur-sm transition-opacity duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-70 backdrop-blur-sm transition-opacity duration-300"
       onClick={onClose}
     >
       <div className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl transition-transform duration-300 ease-in-out transform scale-95">
