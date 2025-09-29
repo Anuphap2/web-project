@@ -7,6 +7,7 @@ import {
   FaTrashAlt,
   FaSave,
   FaBan,
+  FaUser,
   FaCheckCircle,
 } from "react-icons/fa";
 import { BiTask } from "react-icons/bi";
@@ -137,13 +138,13 @@ export default function Tasks({ tasks }: TaskListProps) {
 
                   {/* Assignees */}
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {assignees.length > 0 ? (
+                    {assignees && assignees.length > 0 ? (
                       assignees.map((a) => (
                         <span
                           key={a}
-                          className="badge badge-sm badge-outline text-gray-700"
+                          className="badge badge-sm badge-outline flex items-center gap-1 text-gray-700"
                         >
-                          {a}
+                          <FaUser /> {a}
                         </span>
                       ))
                     ) : (

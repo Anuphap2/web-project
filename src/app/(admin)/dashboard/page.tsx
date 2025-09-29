@@ -1,8 +1,8 @@
 "use client";
 import { useUserStore } from "@/store/userStore";
 import { useTaskStore } from "@/store/Tasks/taskStore";
-import AddTaskForm from "@/components/UI/Tasks/TaskFormAdmin";
-import TaskList from "@/components/UI/Tasks/TasklistAdmin";
+import AddTaskForm from "@/components/UI/Tasks/CRUD/TaskFormAdmin";
+import TaskList from "@/components/UI/Tasks/CRUD/TasklistAdmin";
 import DepartmentUserList from "@/components/UI/users/fetchUser";
 import TaskSummary from "@/components/UI/Tasks/TaskSummaryAll";
 import ExportButton from "@/components/UI/ExportButton";

@@ -9,25 +9,29 @@ export function useAddTaskForm() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [assignedTo, setAssignedTo] = useState<string | "">("");
+  const [assignedTo, setAssignedTo] = useState<string[]>([]);
   const [maxAssignees, setMaxAssignees] = useState(1);
   const [dueDate, setDueDate] = useState("");
 
   const departmentUsers = users.filter((u) => u.department === department);
 
-  const handleAddTask = () => {
+  const handleAddTask = (assignees?: string[]) => { // ✅ รับ argument
+    const finalAssignees = assignees || assignedTo;
+
     if (!title) return alert("กรุณาใส่หัวข้อ task");
+    if (finalAssignees.length > maxAssignees)
+      return alert(`จำนวนผู้รับผิดชอบสูงสุดคือ ${maxAssignees} คน`);
 
     addTask({
       id: Date.now().toString(),
       title,
       description,
-      status: "No Assignee",
+      status: finalAssignees.length ? "In Progress" : "No Assignee", // ปรับให้ตรง enum ของคุณ
       createdBy: username!,
       department: department!,
-      assignedTo: assignedTo || undefined,
+      assignedTo: finalAssignees.length === 1 ? finalAssignees[0] : undefined,
       maxAssignees,
-      assignees: assignedTo ? [assignedTo] : [],
+      assignees: finalAssignees,
       dateEnd: dueDate || undefined,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -36,9 +40,9 @@ export function useAddTaskForm() {
     // reset form
     setTitle("");
     setDescription("");
-    setAssignedTo("");
-    setMaxAssignees(1);
+    setAssignedTo([]);
     setDueDate("");
+    setMaxAssignees(1);
   };
 
   return {
@@ -56,3 +60,4 @@ export function useAddTaskForm() {
     handleAddTask,
   };
 }
+
