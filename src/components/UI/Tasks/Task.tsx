@@ -58,12 +58,12 @@ export default function Tasks({ tasks }: TaskListProps) {
   const getStatusColor = (status: Task["status"]) => {
     switch (status) {
       case "In Progress":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-amber-100 text-amber-800"; // รอดำเนินการ สีส้มอ่อน
       case "Completed":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800"; // เสร็จแล้ว สีเขียวอ่อน
       case "No Assignee":
       default:
-        return "bg-blue-100 text-blue-800";
+        return "bg-indigo-100 text-indigo-800"; // ยังไม่มีผู้รับ สี Indigo อ่อน
     }
   };
 
