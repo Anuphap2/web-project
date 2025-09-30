@@ -86,7 +86,7 @@ export default function HomePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.0, delay: 0.5 }}
             >
-              TASK FLOWS คืออะไร ?
+              TASKS FLOWS คืออะไร ?
             </motion.h1>
             <motion.p
               className="text-base sm:text-lg lg:text-xl text-black/70 leading-relaxed max-w-full lg:max-w-lg"
