@@ -7,10 +7,10 @@ import "react-toastify/dist/ReactToastify.css"; // เพิ่ม CSS ของ
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Task Management",
+  title: "Tasks Flow",
   description: "Your simple and effective task management system.",
   icons: {
-    // icon: "/favicon.ico",
+    icon: "/tasksflow.png",
   },
 };
 

@@ -13,7 +13,7 @@ export type ModalProps = { // ประกาศชนิดข้อมูล�
 
 export type ButtonProps = { // ประกาศชนิดข้อมูลสำหรับ Button component
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     className?: string;
     children?: React.ReactNode;
 };
