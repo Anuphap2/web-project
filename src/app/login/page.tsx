@@ -17,11 +17,10 @@ export default function LoginPage() {
     handleLogin,
   } = useLoginForm();
 
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
-      <div className="w-full max-w-md rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl p-8 space-y-6">
-        <h2 className="text-3xl font-extrabold text-center text-gray-800">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#ff8198]/30 via-white to-white p-4">
+      <div className="w-full max-w-md rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl p-8 space-y-6 border-t-8 border-black/20">
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 font-serif tracking-wide">
           Welcome
         </h2>
 
@@ -35,7 +34,7 @@ export default function LoginPage() {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="input input-bordered w-full pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            className="input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] focus:border-[#ff8198] transition-all"
           />
         </div>
 
@@ -49,7 +48,7 @@ export default function LoginPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="input input-bordered w-full pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            className="input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] focus:border-[#ff8198] transition-all"
           />
         </div>
 
@@ -57,7 +56,7 @@ export default function LoginPage() {
         <select
           value={level}
           onChange={(e) => setLevel(e.target.value as "manager" | "employee")}
-          className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          className="select select-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all"
         >
           <option value="manager">Manager</option>
           <option value="employee">Employee</option>
@@ -67,7 +66,7 @@ export default function LoginPage() {
         <select
           value={department}
           onChange={(e) => setDepartment(e.target.value)}
-          className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          className="select select-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all"
         >
           {departments.map((dep) => (
             <option key={dep} value={dep}>
@@ -80,7 +79,7 @@ export default function LoginPage() {
         <Button
           label="Login"
           onClick={handleLogin}
-          className="btn btn-primary w-full text-lg font-semibold hover:scale-105 transition-transform duration-200"
+          className="btn bg-black text-white hover:bg-gray-800 border-0 w-full text-lg font-bold rounded-full shadow-lg hover:scale-105 transition-transform duration-200"
         />
       </div>
     </div>

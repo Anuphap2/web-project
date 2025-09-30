@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Task } from "@/types/task";
+import { User } from "@/types/users";
 import Button from "@/components/UI/Button";
 import Toast from "@/components/Layout/Toast";
-import Modal from "@/components/UI/Modal"; // ใช้ component ของคุณ
+import Modal from "@/components/UI/Modal";
 import { FaUser } from "react-icons/fa";
 
 interface EditTaskModalProps {
@@ -18,14 +19,14 @@ interface EditTaskModalProps {
     maxAssignees: number;
     dateEnd?: string;
   }) => void;
-  visibleTasks: Task[];
+  users: User[]; // รับ array ของพนักงานจริง
 }
 
 export default function EditTaskModal({
   task,
   onClose,
   onSave,
-  visibleTasks,
+  users,
 }: EditTaskModalProps) {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description || "");
@@ -35,7 +36,6 @@ export default function EditTaskModal({
     task.maxAssignees || 1
   );
   const [dueDate, setDueDate] = useState<string>(task.dateEnd || "");
-
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,9 +48,10 @@ export default function EditTaskModal({
     setDueDate(task.dateEnd || "");
   }, [task]);
 
-  const allUsers = visibleTasks
-    .flatMap((t) => t.assignees || [])
-    .filter((v, i, a) => a.indexOf(v) === i);
+  // เอาพนักงานทั้งหมดในแผนกของ task
+  const allUsersInDept = users
+    .filter((u) => u.department === task.department)
+    .map((u) => u.username);
 
   const handleSave = () => {
     if (!title.trim()) {
@@ -84,7 +85,6 @@ export default function EditTaskModal({
 
   return (
     <Modal isOpen={true} title="Edit Task" onClose={onClose}>
-      {/* Toast */}
       {error && (
         <Toast message={error} type="error" onClose={() => setError(null)} />
       )}
@@ -138,7 +138,6 @@ export default function EditTaskModal({
               <option value="Completed">Completed</option>
             </select>
           </div>
-
           <div className="flex flex-col">
             <label className="label">
               <span className="label-text font-semibold">Due Date</span>
@@ -166,7 +165,6 @@ export default function EditTaskModal({
               className="input input-bordered w-full"
             />
           </div>
-
           <div className="flex flex-col">
             <label className="label">
               <span className="label-text font-semibold">Assign To</span>
@@ -181,7 +179,7 @@ export default function EditTaskModal({
                 tabIndex={0}
                 className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full max-h-48 overflow-auto"
               >
-                {allUsers.map((user) => (
+                {allUsersInDept.map((user) => (
                   <li key={user}>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input

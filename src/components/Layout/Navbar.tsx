@@ -2,8 +2,9 @@
 import Link from "next/link";
 import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
-import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Navbar() {
   const { username, level, logout } = useUserStore();
@@ -14,17 +15,16 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
-    router.push("/");
+    router.push("/login");
   };
 
-  // ✅ ฟังก์ชันสร้างเมนู
   const renderNavLinks = () =>
     level === "manager" ? (
       <>
         <li>
           <Link
             href="/dashboard"
-            className="hover:text-indigo-600 transition-colors"
+            className="hover:text-[#ff8198] transition-colors"
           >
             งานทั้งหมดของแผนก
           </Link>
@@ -32,7 +32,7 @@ export default function Navbar() {
         <li>
           <Link
             href="/addTasks"
-            className="hover:text-indigo-600 transition-colors"
+            className="hover:text-[#ff8198] transition-colors"
           >
             เพิ่มงานใหม่
           </Link>
@@ -40,7 +40,7 @@ export default function Navbar() {
         <li>
           <Link
             href="/listDepart"
-            className="hover:text-indigo-600 transition-colors"
+            className="hover:text-[#ff8198] transition-colors"
           >
             รายชื่อพนักงาน
           </Link>
@@ -49,32 +49,29 @@ export default function Navbar() {
     ) : (
       <>
         <li>
-          <Link
-            href="/home"
-            className="hover:text-indigo-600 transition-colors"
-          >
-            Home
+          <Link href="/home" className="hover:text-[#ff8198] transition-colors">
+            หน้าหลัก
           </Link>
         </li>
         <li>
           <Link
             href="/tasks"
-            className="hover:text-indigo-600 transition-colors"
+            className="hover:text-[#ff8198] transition-colors"
           >
-            My Tasks
+            งานของฉัน
           </Link>
         </li>
       </>
     );
 
   return (
-    <nav className="sticky top-0 z-50 bg-base-100 shadow-md backdrop-blur-md px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#ff8198]/20 via-white to-white shadow-md backdrop-blur-md px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between h-16">
         {/* Logo + Mobile Toggle */}
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden btn btn-ghost btn-circle"
+            className="lg:hidden btn btn-ghost btn-circle text-gray-700 hover:text-[#ff8198]"
           >
             {isMenuOpen ? (
               <FaTimes className="w-5 h-5" />
@@ -87,13 +84,19 @@ export default function Navbar() {
             href={level === "manager" ? "/dashboard" : "/home"}
             className="flex items-center text-xl font-bold text-gray-900"
           >
-            <FaUserCircle className="w-6 h-6 mr-2 text-indigo-600" />
-            My Task Flow
+            <Image
+              src="/tasksflow.png"
+              alt="Logo"
+              width={40}
+              height={40}
+              className="object-contain sm:w-[50px] sm:h-[50px] mr-2"
+            />
+            TasksFlow
           </Link>
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden lg:flex menu menu-horizontal space-x-4">
+        <ul className="hidden lg:flex menu menu-horizontal space-x-4 text-gray-700">
           {renderNavLinks()}
         </ul>
 
@@ -104,7 +107,7 @@ export default function Navbar() {
           </span>
           <button
             onClick={handleLogout}
-            className="btn btn-error btn-sm rounded-full"
+            className="btn bg-[#ff8198] text-white hover:bg-[#e76a87] border-0 btn-sm rounded-full"
           >
             Logout
           </button>
@@ -113,15 +116,15 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden mt-2 bg-base-100 rounded-xl shadow-lg p-4 space-y-3">
-          <ul className="space-y-2">{renderNavLinks()}</ul>
+        <div className="lg:hidden mt-2 bg-white/90 rounded-xl shadow-lg p-4 space-y-3 border-t-4 border-[#ff8198]">
+          <ul className="space-y-2 text-gray-700">{renderNavLinks()}</ul>
           <div className="border-t border-gray-200 pt-2 flex flex-col space-y-2">
             <span className="text-sm font-medium text-gray-700">
               Hi, {username} ({level})
             </span>
             <button
               onClick={handleLogout}
-              className="btn btn-error w-full rounded-lg"
+              className="btn w-full rounded-xl bg-[#ff8198] text-white hover:bg-[#e76a87] border-0"
             >
               Logout
             </button>

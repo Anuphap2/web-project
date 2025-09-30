@@ -1,13 +1,14 @@
 "use client";
-import { useUserStore } from "@/store/userStore";
+import { useUserStore,useUserListStore } from "@/store/userStore";
 import { useTaskStore } from "@/store/Tasks/taskStore";
 import TaskList from "@/components/UI/Tasks/CRUD/TasklistAdmin";
 import TaskSummary from "@/components/UI/Tasks/TaskSummaryAll";
 import ExportButton from "@/components/UI/ExportButton";
 
 export default function HomePage() {
-  const { username, department } = useUserStore();
+  const { username, department } = useUserStore(); // ดึง users มาด้วย
   const tasks = useTaskStore((state) => state.tasks);
+  const users = useUserListStore((state) => state.users); // ดึง user ทั้งหมด
 
   // filter เฉพาะงานในแผนกของ user
   const departmentTasks = tasks.filter((t) => t.department === department);
@@ -27,11 +28,10 @@ export default function HomePage() {
         <TaskSummary />
       </section>
 
-
-      {/* 3. งานทั้งหมดของแผนก */}
+      {/* 2. งานทั้งหมดของแผนก */}
       <section className="bg-white p-6 rounded-xl shadow-md">
         <h2 className="text-2xl font-semibold mb-4">งานทั้งหมดของแผนก</h2>
-        <TaskList tasks={departmentTasks} />
+        {users && <TaskList users={users} tasks={departmentTasks} />}
       </section>
     </div>
   );

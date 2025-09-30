@@ -11,6 +11,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-base-200 p-4 sm:p-8">
+      
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Welcome Card */}
         <div className="card bg-base-100 shadow-xl border border-base-300 transition-shadow duration-300 hover:shadow-2xl">
