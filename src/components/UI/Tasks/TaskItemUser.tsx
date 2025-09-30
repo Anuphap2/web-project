@@ -13,17 +13,17 @@ type EmployeeTaskTableProps = {
 
 const statusMap = {
   "No Assignee": {
-    text: "No Assignee",
+    text: "ยังไม่ถูกมอบหมาย",
     color: "bg-gray-200 text-gray-700",
     icon: FaPlusCircle,
   },
   "In Progress": {
-    text: "In Progress",
+    text: "กำลังดำเนินการ",
     color: "bg-yellow-200 text-yellow-800",
     icon: FaSpinner,
   },
   Completed: {
-    text: "Completed",
+    text: "เสร็จสิ้น",
     color: "bg-green-200 text-green-800",
     icon: FaCheckCircle,
   },
@@ -32,6 +32,7 @@ const statusMap = {
 export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
   const { username, visibleTasks, handleToggleComplete, handleUnassign } =
     useEmployeeTasks(tasks);
+
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const [filterText, setFilterText] = useState("");
 
@@ -40,7 +41,8 @@ export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
   };
 
   if (!username)
-    return <p className="text-center text-gray-500 p-4">กรุณา login ก่อน</p>;
+    return <p className="text-center text-gray-500 p-4">กรุณาเข้าสู่ระบบ</p>;
+
   if (visibleTasks.length === 0)
     return (
       <p className="text-center text-gray-500 p-4">ไม่มีงานที่ได้รับมอบหมาย</p>
@@ -48,18 +50,21 @@ export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
 
   const columns: TableColumn<Task>[] = [
     {
-      name: "Title",
-      selector: (row) => row.title,
+      name: "หัวข้อ",
+      selector: (row) => row.title || "-",
       sortable: true,
       cell: (row) => (
         <div className="flex items-center">
           <BiTask className="mr-2 text-blue-500" />
-          {row.title}
+          {row.title || "-"}
         </div>
       ),
+      wrap: true,
     },
     {
-      name: "Description",
+      name: "รายละเอียด",
+      selector: (row) => row.description || "-",
+      sortable: true,
       cell: (row) => {
         const isExpanded = expandedRows[row.id] || false;
         const text = row.description || "-";
@@ -81,7 +86,8 @@ export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
       wrap: true,
     },
     {
-      name: "Status",
+      name: "สถานะ",
+      selector: (row) => statusMap[row.status]?.text || "ยังไม่ถูกมอบหมาย",
       sortable: true,
       cell: (row) => {
         const statusInfo = statusMap[row.status] || statusMap["No Assignee"];
@@ -97,52 +103,46 @@ export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
       },
     },
     {
-      name: "Assignees",
-      selector: (row) => (row.assignees || []).join(", "),
+      name: "ผู้รับผิดชอบ",
+      selector: (row) => (row.assignees || []).join(", ") || "-",
+      sortable: true,
       wrap: true,
     },
     {
-      name: "Due Date",
-      sortable: true,
+      name: "สิ้นสุดวันที่",
       selector: (row) =>
         row.dateEnd ? new Date(row.dateEnd).toLocaleDateString() : "-",
-    },
-    {
-      name: "Updated At",
       sortable: true,
-      selector: (row) => new Date(row.updatedAt).toLocaleString(),
     },
     {
-      name: "Actions",
+      name: "อัปเดตล่าสุด",
+      selector: (row) =>
+        row.updatedAt ? new Date(row.updatedAt).toLocaleString() : "-",
+      sortable: true,
+    },
+    {
+      name: "การจัดการ",
       cell: (row) => {
         const isAssignedToMe = (row.assignees || []).includes(username);
-
         if (!isAssignedToMe) return null;
 
         return (
           <div className="flex flex-col items-center gap-2">
-            <div>
-              <Button
-                label={
-                  row.status === "Completed" ? "กลับไปทำต่อ" : "ทำงานเสร็จ"
-                }
-                onClick={() => handleToggleComplete(row)}
-                className={`font-semibold ${
-                  row.status === "Completed"
-                    ? "bg-blue-500 hover:bg-blue-600"
-                    : "bg-green-500 hover:bg-green-600"
-                } text-white px-3 py-1.5 text-xs rounded-md transition-colors`}
-              />
-            </div>
-
+            <Button
+              label={row.status === "Completed" ? "กลับไปทำต่อ" : "ทำงานเสร็จ"}
+              onClick={() => handleToggleComplete(row)}
+              className={`font-semibold ${
+                row.status === "Completed"
+                  ? "bg-blue-500 hover:bg-blue-600"
+                  : "bg-green-500 hover:bg-green-600"
+              } text-white px-3 py-1.5 text-xs rounded-md transition-colors`}
+            />
             {row.status === "In Progress" && (
-              <div>
-                <Button
-                  label="ยกเลิก"
-                  onClick={() => handleUnassign(row)}
-                  className="font-semibold bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 text-xs rounded-md transition-colors"
-                />
-              </div>
+              <Button
+                label="ยกเลิก"
+                onClick={() => handleUnassign(row)}
+                className="font-semibold bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 text-xs rounded-md transition-colors"
+              />
             )}
           </div>
         );
@@ -169,12 +169,14 @@ export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
 
   const filteredTasks = visibleTasks.filter(
     (task) =>
-      task.title.toLowerCase().includes(filterText.toLowerCase()) ||
+      (task.title || "").toLowerCase().includes(filterText.toLowerCase()) ||
+      (task.description || "")
+        .toLowerCase()
+        .includes(filterText.toLowerCase()) ||
       (task.assignees || [])
         .join(", ")
         .toLowerCase()
-        .includes(filterText.toLowerCase()) ||
-      (task.description?.toLowerCase() || "").includes(filterText.toLowerCase())
+        .includes(filterText.toLowerCase())
   );
 
   return (

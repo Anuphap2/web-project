@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Button from "@/components/UI/Button";
 import { useGetNewTasks } from "@/hooks/Task";
 import { Task } from "@/types/task";
@@ -35,6 +36,10 @@ export default function Tasks({ tasks }: TaskListProps) {
     setEditStatus,
   } = useGetNewTasks(tasks);
 
+  const [showFullDescMap, setShowFullDescMap] = useState<{
+    [key: string]: boolean;
+  }>({});
+
   if (!username) return null;
 
   if (visibleTasks.length === 0)
@@ -62,19 +67,24 @@ export default function Tasks({ tasks }: TaskListProps) {
     }
   };
 
+  const toggleDesc = (taskId: string) => {
+    setShowFullDescMap((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
+  };
+
   return (
-    <ul className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
+    <ul className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {visibleTasks.map((task) => {
         const isEditing = editingTaskId === task.id;
         const assignees = task.assignees || [];
         const isAssigned = assignees.includes(username);
+        const showFullDesc = showFullDescMap[task.id] || false;
 
         return (
           <li
             key={task.id}
-            className="card bg-base-100 shadow-md hover:shadow-2xl transition-shadow duration-300 border border-base-200 rounded-xl flex flex-col"
+            className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow border border-base-200 rounded-xl flex flex-col"
           >
-            <div className="card-body flex-1 flex flex-col p-5 gap-4">
+            <div className="card-body flex-1 flex flex-col gap-4">
               {/* Header */}
               {isEditing ? (
                 <div className="flex flex-col gap-3">
@@ -106,8 +116,8 @@ export default function Tasks({ tasks }: TaskListProps) {
               ) : (
                 <>
                   <div className="flex justify-between items-start flex-wrap gap-2">
-                    <h3 className="card-title text-2xl font-bold flex items-center gap-2 line-clamp-2">
-                      <BiTask className="text-primary text-2xl" />
+                    <h3 className="card-title text-xl sm:text-2xl font-bold flex flex-wrap items-center gap-2 break-words">
+                      <BiTask className="text-primary text-xl sm:text-2xl" />
                       {task.title}
                     </h3>
 
@@ -120,17 +130,32 @@ export default function Tasks({ tasks }: TaskListProps) {
                     </span>
                   </div>
 
+                  {/* Description with toggle */}
                   {task.description && (
-                    <p className="text-gray-600 leading-relaxed line-clamp-3">
-                      {task.description}
-                    </p>
+                    <div>
+                      <p
+                        className={`text-gray-600 leading-relaxed ${
+                          showFullDesc ? "" : "line-clamp-3"
+                        }`}
+                      >
+                        {task.description}
+                      </p>
+                      {task.description.length > 100 && (
+                        <button
+                          className="text-blue-500 text-sm underline mt-1"
+                          onClick={() => toggleDesc(task.id)}
+                        >
+                          {showFullDesc ? "ซ่อน" : "ดูเพิ่มเติม"}
+                        </button>
+                      )}
+                    </div>
                   )}
+
                   {task.dateEnd && (
                     <p className="text-gray-500 text-sm">
                       สิ้นสุดวันที่: {task.dateEnd}
                     </p>
                   )}
-
                   {task.maxAssignees && (
                     <p className="text-gray-600 leading-relaxed line-clamp-3">
                       จำนวนผู้รับผิดชอบ: {task.maxAssignees} คน
@@ -139,7 +164,7 @@ export default function Tasks({ tasks }: TaskListProps) {
 
                   {/* Assignees */}
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {assignees && assignees.length > 0 ? (
+                    {assignees.length > 0 ? (
                       assignees.map((a) => (
                         <span
                           key={a}
@@ -163,46 +188,46 @@ export default function Tasks({ tasks }: TaskListProps) {
                   isEditing ? (
                     <>
                       <Button
-                        label="Save"
+                        label="บันทึก"
                         onClick={() => saveTask(task)}
                         className="btn btn-success btn-sm gap-1 hover:scale-105 transition-transform"
                       >
-                        <FaSave /> Save
+                        <FaSave /> บันทึก
                       </Button>
                       <Button
-                        label="Cancel"
+                        label="ยกเลิก"
                         onClick={cancelEditing}
                         className="btn btn-error btn-sm gap-1 hover:scale-105 transition-transform"
                       >
-                        <FaBan /> Cancel
+                        <FaBan /> ยกเลิก
                       </Button>
                     </>
                   ) : (
                     <>
                       <Button
-                        label="Edit"
+                        label="แก้ไข"
                         onClick={() => startEditing(task)}
                         className="btn btn-primary btn-sm gap-1 hover:scale-105 transition-transform"
                       >
-                        <FaEdit /> Edit
+                        <FaEdit /> แก้ไข
                       </Button>
                       <Button
-                        label="Delete"
+                        label="ลบ"
                         onClick={() => handleDeleteTask(task)}
                         className="btn btn-ghost btn-sm gap-1 text-error hover:bg-error/10 hover:text-error"
                       >
-                        <FaTrashAlt />
+                        <FaTrashAlt /> ลบ
                       </Button>
                     </>
                   )
                 ) : (
                   !isAssigned && (
                     <Button
-                      label="Claim Task"
+                      label="รับงาน"
                       onClick={() => handleClaimTask(task)}
                       className="btn btn-secondary btn-sm gap-1 w-full hover:scale-105 transition-transform"
                     >
-                      <BiTask /> Claim Task
+                      <BiTask /> รับงาน
                     </Button>
                   )
                 )}
