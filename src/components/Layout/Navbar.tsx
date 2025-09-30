@@ -26,7 +26,15 @@ export default function Navbar() {
             href="/dashboard"
             className="hover:text-indigo-600 transition-colors"
           >
-            Dashboard
+            งานทั้งหมดของแผนก
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/addTasks"
+            className="hover:text-indigo-600 transition-colors"
+          >
+            เพิ่มงานใหม่
           </Link>
         </li>
         <li>
