@@ -1,88 +1,74 @@
-"use client";
-import { useLoginForm } from "@/hooks/useLoginForm";
-import { FaUser, FaLock } from "react-icons/fa";
-import Button from "@/components/UI/Button";
+// App.js
+import React from "react";
 
-export default function LoginPage() {
-  const {
-    username,
-    setUsername,
-    password,
-    setPassword,
-    level,
-    setLevel,
-    department,
-    setDepartment,
-    departments,
-    handleLogin,
-  } = useLoginForm();
-
-
+// โค้ดสำหรับแสดงผลใน React
+export default function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
-      <div className="w-full max-w-md rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl p-8 space-y-6">
-        <h2 className="text-3xl font-extrabold text-center text-gray-800">
-          Welcome
-        </h2>
-
-        {/* Username Input */}
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            <FaUser />
-          </span>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="input input-bordered w-full pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-          />
+    <>
+      <div className="hero min-h-screen">
+        <div className="hero-content text-center">
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold">Hello there</h1>
+            <p className="py-6">
+              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
+              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
+              et a id nisi.
+            </p>
+            <button className="btn btn-primary">Get Started</button>
+          </div>
         </div>
-
-        {/* Password Input */}
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            <FaLock />
-          </span>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input input-bordered w-full pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-          />
-        </div>
-
-        {/* Level Select */}
-        <select
-          value={level}
-          onChange={(e) => setLevel(e.target.value as "manager" | "employee")}
-          className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-        >
-          <option value="manager">Manager</option>
-          <option value="employee">Employee</option>
-        </select>
-
-        {/* Department Select */}
-        <select
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-          className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-        >
-          {departments.map((dep) => (
-            <option key={dep} value={dep}>
-              {dep}
-            </option>
-          ))}
-        </select>
-
-        {/* Login Button */}
-        <Button
-          label="Login"
-          onClick={handleLogin}
-          className="btn btn-primary w-full text-lg font-semibold hover:scale-105 transition-transform duration-200"
-        />
       </div>
-    </div>
+
+      <div className="flex flex-col min-h-screen">
+        <div className="relative hero-2 flex-1 flex items-center justify-center">
+          {/* Hero content for the top section */}
+          <div className="hero-content text-center text-white py-20">
+            <div className="max-w-md">
+              <h1 className="text-5xl font-bold">Hello there</h1>
+              <p className="py-6">
+                Provident cupiditate voluptatem et in. Quaerat fugiat ut
+                assumenda excepturi exercitationem quasi. In deleniti eaque aut
+                repudiandae et a id nisi.
+              </p>
+              <button className="btn btn-primary">Get Started</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col min-h-screen">
+        <div className="relative hero-3 flex-1 flex items-center justify-center">
+          {/* Hero content for the top section */}
+          <div className="hero-content text-center text-white py-20">
+            <div className="max-w-md">
+              <h1 className="text-5xl font-bold">Hello there</h1>
+              <p className="py-6">
+                Provident cupiditate voluptatem et in. Quaerat fugiat ut
+                assumenda excepturi exercitationem quasi. In deleniti eaque aut
+                repudiandae et a id nisi.
+              </p>
+              <button className="btn btn-primary">Get Started</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col min-h-screen">
+        <div className="relative hero-4 flex-1 flex items-center justify-center">
+          {/* Hero content for the top section */}
+          <div className="hero-content text-center text-white py-20">
+            <div className="max-w-md">
+              <h1 className="text-5xl font-bold">Hello there</h1>
+              <p className="py-6">
+                Provident cupiditate voluptatem et in. Quaerat fugiat ut
+                assumenda excepturi exercitationem quasi. In deleniti eaque aut
+                repudiandae et a id nisi.
+              </p>
+              <button className="btn btn-primary">Get Started</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
