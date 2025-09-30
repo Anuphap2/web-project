@@ -1,12 +1,18 @@
 "use client";
 import { useState } from "react";
 import { Task } from "@/types/task";
+import { User } from "@/types/users";
 import { useTaskListAll } from "@/hooks/TasklistAdmin";
 import TaskTable from "../Table/TaskTable";
 import EditTaskModal from "./EditTaskModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
-export default function Tasklist({ tasks }: { tasks: Task[] }) {
+interface TasklistProps {
+  tasks: Task[];
+  users: User[]; // รับข้อมูลพนักงานทั้งหมดเป็น props
+}
+
+export default function Tasklist({ tasks, users }: TasklistProps) {
   const {
     username,
     level: levelRaw,
@@ -20,15 +26,16 @@ export default function Tasklist({ tasks }: { tasks: Task[] }) {
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
-  const [filterText, setFilterText] = useState(""); // ต้องเพิ่มบรรทัดนี้
+  const [filterText, setFilterText] = useState("");
 
   const filteredTasks = visibleTasks.filter(
     (task) =>
       task.title.toLowerCase().includes(filterText.toLowerCase()) ||
-      (task.assignees || "").includes(filterText.toLowerCase()) ||
+      (task.assignees || []).some((a) =>
+        a.toLowerCase().includes(filterText.toLowerCase())
+      ) ||
       (task.description?.toLowerCase() || "").includes(filterText.toLowerCase())
   );
-  
 
   if (!username) return null;
   if (visibleTasks.length === 0) return <p>ไม่มีงานให้แสดงตอนนี้</p>;
@@ -59,7 +66,7 @@ export default function Tasklist({ tasks }: { tasks: Task[] }) {
           task={editingTask}
           onClose={() => setEditingTask(null)}
           onSave={saveEdit}
-          visibleTasks={visibleTasks} // สำหรับรายชื่อ assignees
+          users={users || []} // ใส่ default เป็น array ว่าง
         />
       )}
 
