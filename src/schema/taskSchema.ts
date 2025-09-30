@@ -5,5 +5,5 @@ export const taskSchema = z.object({
   description: z.string().optional(),
   status: z.enum(["No Assignee", "In Progress", "Completed"]),
   dateEnd: z.string().optional(),
-  assignedTo: z.string().optional(),
+  assignedTo: z.array(z.string()).optional()
 });

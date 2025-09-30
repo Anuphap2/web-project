@@ -10,23 +10,34 @@ export default function Navbar() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  if (!username) return null;
+
   const handleLogout = () => {
     logout();
     router.push("/");
   };
 
-  if (!username) return null;
-
-  const navLinks =
+  // ✅ ฟังก์ชันสร้างเมนู
+  const renderNavLinks = () =>
     level === "manager" ? (
-      <li>
-        <Link
-          href="/dashboard"
-          className="hover:text-indigo-600 transition-colors"
-        >
-          Dashboard
-        </Link>
-      </li>
+      <>
+        <li>
+          <Link
+            href="/dashboard"
+            className="hover:text-indigo-600 transition-colors"
+          >
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/listDepart"
+            className="hover:text-indigo-600 transition-colors"
+          >
+            รายชื่อพนักงาน
+          </Link>
+        </li>
+      </>
     ) : (
       <>
         <li>
@@ -49,11 +60,10 @@ export default function Navbar() {
     );
 
   return (
-    <nav className="sticky top-0 z-50 bg-base-100 shadow-md backdrop-blur-md px-4 sm:px-6 lg:px-8 transition-shadow">
+    <nav className="sticky top-0 z-50 bg-base-100 shadow-md backdrop-blur-md px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between h-16">
         {/* Logo + Mobile Toggle */}
         <div className="flex items-center space-x-3">
-          {/* Hamburger mobile */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden btn btn-ghost btn-circle"
@@ -65,7 +75,6 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Logo */}
           <Link
             href={level === "manager" ? "/dashboard" : "/home"}
             className="flex items-center text-xl font-bold text-gray-900"
@@ -76,11 +85,9 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex space-x-6">
-          <ul className="menu menu-horizontal px-1 flex space-x-4">
-            {navLinks}
-          </ul>
-        </div>
+        <ul className="hidden lg:flex menu menu-horizontal space-x-4">
+          {renderNavLinks()}
+        </ul>
 
         {/* Desktop User Info */}
         <div className="hidden lg:flex items-center space-x-4">
@@ -99,7 +106,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="lg:hidden mt-2 bg-base-100 rounded-xl shadow-lg p-4 space-y-3">
-          <ul className="space-y-2">{navLinks}</ul>
+          <ul className="space-y-2">{renderNavLinks()}</ul>
           <div className="border-t border-gray-200 pt-2 flex flex-col space-y-2">
             <span className="text-sm font-medium text-gray-700">
               Hi, {username} ({level})

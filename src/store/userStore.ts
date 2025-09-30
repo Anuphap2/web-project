@@ -10,12 +10,24 @@ export const useUserListStore = create<UserListStore>()(
       addUser: (user: User) =>
         set((state: UserListStore) => {
           const checkUser = state.users.find((u) => u.username === user.username);
-          if (checkUser) return state; // ถ้า user มีอยู่แล้ว ไม่เพิ่มซ้ำ
+          if (checkUser) return state; // ถ้ามีอยู่แล้ว ไม่เพิ่มซ้ำ
           return { users: [...state.users, user] };
         }),
+
+      updateUser: (updatedUser: User) =>
+        set((state) => ({
+          users: state.users.map(u =>
+            u.username === updatedUser.username ? { ...updatedUser } : u
+          ),
+        })),
+
+
+      deleteUser: (username: string) =>
+        set((state: UserListStore) => ({
+          users: state.users.filter((u) => u.username !== username),
+        })),
     }),
     { name: "user-list-storage" } // key ใน localStorage
-
   )
 );
 

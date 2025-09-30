@@ -25,6 +25,9 @@ export type UserStore = {
 export type UserListStore = {
   users: User[];
   addUser: (user: User) => void;
+  updateUser: (user: User) => void
+  deleteUser: (username: string) => void;
 };
+
 
 

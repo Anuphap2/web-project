@@ -2,6 +2,7 @@
 import { useAddTaskForm } from "@/hooks/TaskFormAdmin";
 import { useState } from "react";
 import Toast from "@/components/Layout/Toast";
+import { taskSchema } from "@/schema/taskSchema";
 
 export default function AddTaskForm() {
   const {
@@ -25,32 +26,29 @@ export default function AddTaskForm() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const onSubmit = () => {
-    if (!title.trim()) {
-      setError("กรุณากรอกชื่อ Task");
-      return;
-    }
-    if (!dueDate) {
-      setError("กรุณาเลือกวันครบกำหนด");
-      return;
-    }
-    if (assignedToMulti.length === 0) {
-      setError("กรุณาเลือกผู้รับผิดชอบอย่างน้อย 1 คน");
-      return;
-    }
-    if (assignedToMulti.length > maxAssignees) {
-      setError(`จำนวนผู้รับผิดชอบสูงสุดคือ ${maxAssignees} คน`);
+    // ตรวจสอบด้วย Zod schema
+    const result = taskSchema.safeParse({
+      title,
+      description,
+      status: "No Assignee",
+      dateEnd: dueDate,
+      assignedTo: assignedToMulti,
+    });
+
+    if (!result.success) {
+      // ดึงข้อความ error ของ field แรก (หรือเอาหลายข้อถ้าต้องการ)
+      const firstErrorMessage =
+        result.error.issues[0]?.message ?? "ข้อมูลไม่ถูกต้อง";
+      setError(firstErrorMessage);
+      setSuccess(null);
       return;
     }
 
-    try {
-      handleAddTask(assignedToMulti); // ส่ง array ไปตรงนี้
-      setError(null);
-      setSuccess("เพิ่ม Task สำเร็จ!");
-      setAssignedToMulti([]); // reset
-    } catch {
-      setSuccess(null);
-      setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
-    }
+    // ผ่าน validation แล้ว
+    handleAddTask(assignedToMulti);
+    setAssignedToMulti([]);
+    setSuccess("เพิ่ม Task สำเร็จ!");
+    setError(null);
   };
 
   return (
@@ -68,16 +66,16 @@ export default function AddTaskForm() {
           />
         )}
 
-        <h2 className="text-2xl font-bold text-gray-800">Add New Task</h2>
+        <h2 className="text-2xl font-bold text-gray-800">สร้างงาน</h2>
 
         {/* Task Title */}
         <div className="form-control w-full">
           <label className="label">
-            <span className="label-text font-semibold">Task Title</span>
+            <span className="label-text font-semibold">หัวข้องาน</span>
           </label>
           <input
             type="text"
-            placeholder="Enter task title"
+            placeholder="หัวข้องาน"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="input input-bordered w-full"
@@ -87,10 +85,10 @@ export default function AddTaskForm() {
         {/* Description */}
         <div className="form-control w-full">
           <label className="label">
-            <span className="label-text font-semibold">Description</span>
+            <span className="label-text font-semibold">รายละเอียดของงาน</span>
           </label>
           <textarea
-            placeholder="Enter task description"
+            placeholder="รายละเอียดของงาน"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="textarea textarea-bordered w-full h-24"
@@ -100,7 +98,7 @@ export default function AddTaskForm() {
         {/* Max Assignees */}
         <div className="form-control w-full">
           <label className="label">
-            <span className="label-text font-semibold">Max Assignees</span>
+            <span className="label-text font-semibold">จำนวนผู้รับผิดชอบ</span>
           </label>
           <input
             type="number"
@@ -117,7 +115,7 @@ export default function AddTaskForm() {
 
         <div className="form-control w-full">
           <label className="label">
-            <span className="label-text font-semibold">Assign To</span>
+            <span className="label-text font-semibold">มอบหมายงานให้</span>
           </label>
           <div className="border rounded p-2 max-h-48 overflow-y-auto">
             {departmentUsers.map((u) => (
@@ -152,7 +150,7 @@ export default function AddTaskForm() {
         {/* Due Date */}
         <div className="form-control w-full">
           <label className="label">
-            <span className="label-text font-semibold">Due Date</span>
+            <span className="label-text font-semibold">ถึงวันวันที่</span>
           </label>
           <input
             type="date"
@@ -165,7 +163,7 @@ export default function AddTaskForm() {
         {/* Submit Button */}
         <div className="form-control w-full mt-4">
           <button onClick={onSubmit} className="btn btn-primary w-full">
-            Add Task
+            เพิ่มงาน
           </button>
         </div>
       </div>

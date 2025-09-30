@@ -1,9 +1,11 @@
 "use client";
+import { useState } from "react";
+import DataTable, { TableColumn } from "react-data-table-component";
 import { Task } from "@/types/task";
-import { useEmployeeTasks } from "@/hooks/TaskItemUser";
 import Button from "@/components/UI/Button";
 import { FaCheckCircle, FaSpinner, FaPlusCircle } from "react-icons/fa";
 import { BiTask } from "react-icons/bi";
+import { useEmployeeTasks } from "@/hooks/TaskItemUser";
 
 type EmployeeTaskTableProps = {
   tasks: Task[];
@@ -30,6 +32,12 @@ const statusMap = {
 export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
   const { username, visibleTasks, handleToggleComplete, handleUnassign } =
     useEmployeeTasks(tasks);
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const [filterText, setFilterText] = useState("");
+
+  const toggleRow = (id: string) => {
+    setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   if (!username)
     return <p className="text-center text-gray-500 p-4">กรุณา login ก่อน</p>;
@@ -38,108 +46,159 @@ export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
       <p className="text-center text-gray-500 p-4">ไม่มีงานที่ได้รับมอบหมาย</p>
     );
 
-  return (
-    <div className="overflow-x-auto bg-white rounded-lg shadow-lg p-6">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Title
-            </th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Description
-            </th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Status
-            </th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Assignees
-            </th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Due Date
-            </th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Updated At
-            </th>
-            <th className="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {visibleTasks.map((task) => {
-            const assignees = task.assignees || [];
-            const isAssignedToMe = assignees.includes(username);
-            const statusInfo =
-              statusMap[task.status] || statusMap["No Assignee"];
-
-            return (
-              <tr
-                key={task.id}
-                className="hover:bg-gray-50 transition-colors duration-200 odd:bg-white even:bg-gray-50"
+  const columns: TableColumn<Task>[] = [
+    {
+      name: "Title",
+      selector: (row) => row.title,
+      sortable: true,
+      cell: (row) => (
+        <div className="flex items-center">
+          <BiTask className="mr-2 text-blue-500" />
+          {row.title}
+        </div>
+      ),
+    },
+    {
+      name: "Description",
+      cell: (row) => {
+        const isExpanded = expandedRows[row.id] || false;
+        const text = row.description || "-";
+        const shortText = text.length > 100 ? text.slice(0, 100) + "..." : text;
+        return (
+          <div>
+            <p>{isExpanded ? text : shortText}</p>
+            {text.length > 100 && (
+              <button
+                className="text-blue-500 text-sm underline mt-1"
+                onClick={() => toggleRow(row.id)}
               >
-                <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  <div className="flex items-center">
-                    <BiTask className="mr-2 text-blue-500" />
-                    {task.title}
-                  </div>
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {task.description || "-"}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusInfo.color}`}
-                  >
-                    <statusInfo.icon className="mr-1" />
-                    {statusInfo.text}
-                  </span>
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {assignees.join(", ") || "Unassigned"}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {task.dateEnd
-                    ? new Date(task.dateEnd).toLocaleDateString()
-                    : "-"}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(task.updatedAt).toLocaleString()}
-                </td>
+                {isExpanded ? "ซ่อน" : "ดูเพิ่มเติม"}
+              </button>
+            )}
+          </div>
+        );
+      },
+      wrap: true,
+    },
+    {
+      name: "Status",
+      sortable: true,
+      cell: (row) => {
+        const statusInfo = statusMap[row.status] || statusMap["No Assignee"];
+        const Icon = statusInfo.icon;
+        return (
+          <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusInfo.color}`}
+          >
+            <Icon className="mr-1" />
+            {statusInfo.text}
+          </span>
+        );
+      },
+    },
+    {
+      name: "Assignees",
+      selector: (row) => (row.assignees || []).join(", "),
+      wrap: true,
+    },
+    {
+      name: "Due Date",
+      sortable: true,
+      selector: (row) =>
+        row.dateEnd ? new Date(row.dateEnd).toLocaleDateString() : "-",
+    },
+    {
+      name: "Updated At",
+      sortable: true,
+      selector: (row) => new Date(row.updatedAt).toLocaleString(),
+    },
+    {
+      name: "Actions",
+      cell: (row) => {
+        const isAssignedToMe = (row.assignees || []).includes(username);
 
-                {/* ปรับปรุง: ใช้ div พร้อม flex และ gap-2 เพื่อแยกปุ่ม */}
-                <td className="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
-                  {isAssignedToMe && (
-                    <div className="flex justify-center gap-2">
-                      <Button
-                        label={
-                          task.status === "Completed"
-                            ? "Mark In Progress"
-                            : "Complete Task"
-                        }
-                        onClick={() => handleToggleComplete(task)}
-                        // ปรับขนาดปุ่มให้เล็กลงเล็กน้อย: px-3 py-1.5 text-xs
-                        className={`font-semibold ${
-                          task.status === "Completed"
-                            ? "bg-blue-500 hover:bg-blue-600"
-                            : "bg-green-500 hover:bg-green-600"
-                        } text-white px-3 py-1.5 text-xs rounded-md transition-colors`}
-                      />
-                      {task.status === "In Progress" && (
-                        <Button
-                          label="Unassign"
-                          onClick={() => handleUnassign(task)}
-                          className="font-semibold bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 text-xs rounded-md transition-colors"
-                        />
-                      )}
-                    </div>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+        if (!isAssignedToMe) return null;
+
+        return (
+          <div className="flex flex-col items-center gap-2">
+            <div>
+              <Button
+                label={
+                  row.status === "Completed" ? "กลับไปทำต่อ" : "ทำงานเสร็จ"
+                }
+                onClick={() => handleToggleComplete(row)}
+                className={`font-semibold ${
+                  row.status === "Completed"
+                    ? "bg-blue-500 hover:bg-blue-600"
+                    : "bg-green-500 hover:bg-green-600"
+                } text-white px-3 py-1.5 text-xs rounded-md transition-colors`}
+              />
+            </div>
+
+            {row.status === "In Progress" && (
+              <div>
+                <Button
+                  label="ยกเลิก"
+                  onClick={() => handleUnassign(row)}
+                  className="font-semibold bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 text-xs rounded-md transition-colors"
+                />
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
+
+  const customStyles = {
+    headRow: {
+      style: {
+        backgroundColor: "#f3f4f6",
+        fontWeight: "bold",
+        fontSize: "16px",
+      },
+    },
+    rows: {
+      style: {
+        minHeight: "50px",
+        fontSize: "14px",
+        borderBottom: "1px solid #e5e7eb",
+      },
+    },
+  };
+
+  const filteredTasks = visibleTasks.filter(
+    (task) =>
+      task.title.toLowerCase().includes(filterText.toLowerCase()) ||
+      (task.assignees || [])
+        .join(", ")
+        .toLowerCase()
+        .includes(filterText.toLowerCase()) ||
+      (task.description?.toLowerCase() || "").includes(filterText.toLowerCase())
+  );
+
+  return (
+    <div className="p-4 bg-white rounded-xl shadow-lg">
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="ค้นหาหัวข้องาน รายละเอียด หรือ ผู้รับผิดชอบ"
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+          className="input input-bordered w-full max-w-sm"
+        />
+      </div>
+
+      <DataTable
+        columns={columns}
+        data={filteredTasks}
+        pagination
+        highlightOnHover
+        striped
+        responsive
+        customStyles={customStyles}
+        noHeader
+      />
     </div>
   );
 }

@@ -22,11 +22,6 @@ export default function Modal({
         <div className="mb-4">{children}</div>
 
         {/* Footer optional */}
-        <div className="modal-action">
-          <button className="btn btn-primary" onClick={onClose}>
-            Close
-          </button>
-        </div>
       </div>
     </div>
   );
