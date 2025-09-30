@@ -10,7 +10,7 @@ export default function Toast({ message, type = "info", onClose }: ToastProps) {
   }[type];
 
   return (
-    <div className="toast toast-end">
+    <div className="toast toast-end z-50">
       <div className={`alert ${typeClass}`}>
         <span>{message}</span>
         <button className="ml-2 btn btn-sm btn-ghost" onClick={onClose}>

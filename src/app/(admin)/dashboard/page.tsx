@@ -3,7 +3,6 @@ import { useUserStore } from "@/store/userStore";
 import { useTaskStore } from "@/store/Tasks/taskStore";
 import AddTaskForm from "@/components/UI/Tasks/CRUD/TaskFormAdmin";
 import TaskList from "@/components/UI/Tasks/CRUD/TasklistAdmin";
-import DepartmentUserList from "@/components/UI/users/fetchUser";
 import TaskSummary from "@/components/UI/Tasks/TaskSummaryAll";
 import ExportButton from "@/components/UI/ExportButton";
 
@@ -28,17 +27,9 @@ export default function HomePage() {
         <TaskSummary />
       </section>
 
-      {/* 2. Users in Department */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          Users in Your Department
-        </h2>
-        <DepartmentUserList />
-      </section>
-
       {/* 3. Add Task Form */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">Add New Task</h2>
+        <h2 className="text-2xl font-semibold mb-4">เพิ่มงานใหม่</h2>
         <AddTaskForm />
       </section>
 

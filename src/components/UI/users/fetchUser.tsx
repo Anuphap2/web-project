@@ -3,47 +3,67 @@ import { useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { useUserStore, useUserListStore } from "@/store/userStore";
 import { UserDataTable } from "@/types/users";
+import Button from "@/components/UI/Button";
+import Modal from "@/components/UI/Modal";
 
 export default function DepartmentUserTable() {
   const department = useUserStore((state) => state.department);
-  const users = useUserListStore((state) => state.users);
+  const { users, deleteUser } = useUserListStore();
   const departmentUsers = users.filter((u) => u.department === department);
 
   const [filterText, setFilterText] = useState("");
+  const [userToDelete, setUserToDelete] = useState<UserDataTable | null>(null);
 
+  // กรอง user จากช่องค้นหา
   const filteredUsers = departmentUsers.filter(
     (user) =>
       user.username.toLowerCase().includes(filterText.toLowerCase()) ||
       user.level.toLowerCase().includes(filterText.toLowerCase())
   );
 
+  // เตรียมลบ user
+  const confirmDelete = (user: UserDataTable) => {
+    setUserToDelete(user);
+  };
+
+  const handleDelete = () => {
+    if (userToDelete) {
+      deleteUser(userToDelete.username);
+      setUserToDelete(null);
+    }
+  };
+
+  const currentUsername = useUserStore((state) => state.username);
+
   const columns: TableColumn<UserDataTable>[] = [
+    { name: "Username", selector: (row) => row.username, sortable: true },
+    { name: "Level", selector: (row) => row.level, sortable: true },
+    { name: "Department", selector: (row) => row.department, sortable: true },
     {
-      name: "Username",
-      selector: (row) => row.username,
-      sortable: true,
-    },
-    {
-      name: "Level",
-      selector: (row) => row.level,
-      sortable: true,
-    },
-    {
-      name: "Department",
-      selector: (row) => row.department,
-      sortable: true,
+      name: "Actions",
+      cell: (row) => {
+        // ถ้า current user เป็น manager หรือ row เป็น manager/ตัวเอง → ซ่อนปุ่ม
+        if (
+          row.username === currentUsername || // ห้ามลบตัวเอง
+          row.level === "manager" // ห้ามลบ manager
+        ) {
+          return null;
+        }
+        return (
+          <Button
+            className="btn-error"
+            label="Delete"
+            onClick={() => confirmDelete(row)}
+          />
+        );
+      },
     },
   ];
 
   const customStyles = {
-    header: {
-      style: {
-        minHeight: "56px",
-      },
-    },
     headRow: {
       style: {
-        backgroundColor: "#f3f4f6", // สีหัวตารางแบบ Tailwind gray-100
+        backgroundColor: "#f3f4f6",
         fontWeight: "bold",
         fontSize: "16px",
       },
@@ -52,13 +72,7 @@ export default function DepartmentUserTable() {
       style: {
         minHeight: "50px",
         fontSize: "14px",
-        borderBottom: "1px solid #e5e7eb", // Tailwind gray-200
-      },
-    },
-    cells: {
-      style: {
-        paddingLeft: "16px",
-        paddingRight: "16px",
+        borderBottom: "1px solid #e5e7eb",
       },
     },
   };
@@ -69,7 +83,6 @@ export default function DepartmentUserTable() {
         Users in Department: {department}
       </h2>
 
-      {/* Search Input */}
       <div className="mb-4">
         <input
           type="text"
@@ -89,6 +102,26 @@ export default function DepartmentUserTable() {
         noHeader
         customStyles={customStyles}
       />
+
+      {/* Modal ลบผู้ใช้ */}
+      <Modal
+        isOpen={!!userToDelete}
+        title="Confirm Delete"
+        onClose={() => setUserToDelete(null)}
+      >
+        <p>
+          คุณแน่ใจหรือไม่ที่จะลบผู้ใช้{" "}
+          <span className="font-bold">{userToDelete?.username}</span>?
+        </p>
+        <div className="modal-action justify-end gap-2 mt-4">
+          <Button
+            className="secondary"
+            label="Cancel"
+            onClick={() => setUserToDelete(null)}
+          />
+          <Button className="btn-error" label="Delete" onClick={handleDelete} />
+        </div>
+      </Modal>
     </div>
   );
 }

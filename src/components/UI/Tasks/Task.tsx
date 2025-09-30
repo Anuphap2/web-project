@@ -106,10 +106,11 @@ export default function Tasks({ tasks }: TaskListProps) {
               ) : (
                 <>
                   <div className="flex justify-between items-start flex-wrap gap-2">
-                    <h3 className="card-title text-2xl font-bold flex items-center gap-2">
+                    <h3 className="card-title text-2xl font-bold flex items-center gap-2 line-clamp-2">
                       <BiTask className="text-primary text-2xl" />
                       {task.title}
                     </h3>
+
                     <span
                       className={`px-3 py-1 rounded-full font-semibold text-sm ${getStatusColor(
                         task.status
