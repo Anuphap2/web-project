@@ -19,7 +19,7 @@ const featuresData = [
   },
   {
     title: "📊 วิเคราะห์แดชบอร์ด",
-    desc: "ดูภาพรวมและประสิทธิภาพการทำงานของทีมด้วยกราฟและรายงานวิเคราะห์ผล",
+    desc: "ดูภาพรวมและประสิทธิภาพการทำงานของทีมด้วยรายงานวิเคราะห์ผล",
     icon: FiBarChart2,
   },
   {
@@ -86,7 +86,7 @@ export default function HomePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.0, delay: 0.5 }}
             >
-              About
+              TASK FLOWS คืออะไร ?
             </motion.h1>
             <motion.p
               className="text-base sm:text-lg lg:text-xl text-black/70 leading-relaxed max-w-full lg:max-w-lg"
@@ -94,11 +94,9 @@ export default function HomePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.0, delay: 0.7 }}
             >
-              **Workflow Manager** is a task management system that makes work
-              clear and efficient. Managers can assign tasks and view employees,
-              while employees can access departmental tasks, accept them, or
-              work on assigned ones — all with **real-time tracking** and
-              improved collaboration.
+              คือเว็บที่สามารถช่วยในการจัดระบบงานของคุณได้ สามารถแบ่งงาน
+              และให้รายละเอียดงานในทีเดียว หรือดูงานทั้งหมดในแผนกหรือแค่ของคุณ
+              เพื่อให้คุณสามารถจัดการงานได้ง่ายขึ้น และทำงานเป็นทีมให้ดีขึ้น
             </motion.p>
           </div>
 
