@@ -1,9 +1,36 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 export default function HomePage() {
   const router = useRouter();
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!pageRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+    const scroller = pageRef.current.closest("main") as HTMLElement | null;
+
+    const smoother = ScrollSmoother.create({
+      wrapper: scroller ?? undefined,
+      content: pageRef.current,
+      smooth: 1.2,
+      normalizeScroll: true,
+      effects: true,
+    });
+
+    return () => {
+      smoother.kill();
+    };
+  }, []);
+
+
   const GreenBlob = ({ className = "" }) => (
     <svg
       className={`absolute inset-0 w-full h-full ${className}`}
@@ -18,8 +45,8 @@ export default function HomePage() {
     </svg>
   );
   return (
-    <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
-      <section className="min-h-screen snap-start relative overflow-hidden py-10 sm:py-16 bg-landing">
+    <div ref={pageRef}>
+      <section className="min-h-screen relative overflow-hidden py-10 sm:py-16 bg-landing">
         {/* Logo */}
         <div
           className="absolute top-5 left-5 sm:top-10 sm:left-10 z-10"
@@ -90,7 +117,7 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="min-h-screen snap-start bg-landing px-6 py-16">
+      <section className="min-h-screen bg-landing px-6 py-16">
         <h1 className="text-3xl font-bold text-center mb-12">Features</h1>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -124,7 +151,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="hero snap-start bg-base-200 min-h-screen">
+      <section className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <img
             src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
