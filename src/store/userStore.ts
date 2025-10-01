@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 import { User, UserStore, UserListStore } from "@/types/users";
 
 // store สำหรับ user list
-export const useUserListStore = create<UserListStore>()(
+const useUserListStore = create<UserListStore>()(
   persist(
     (set) => ({
       users: [],
@@ -32,7 +32,7 @@ export const useUserListStore = create<UserListStore>()(
 );
 
 // store สำหรับ user ปัจจุบัน
-export const useUserStore = create<UserStore>()(
+const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
       username: null,
@@ -41,17 +41,6 @@ export const useUserStore = create<UserStore>()(
       department: null,
 
       login: (username, password, level, department) => {
-        // ถ้าเป็น boss → บังคับค่าให้ตายตัว
-        if (username === "boss" && password === "1234") {
-          set({
-            username: "boss",
-            password: "1234",
-            level: "manager",
-            department: "HR",
-          });
-          return;
-        }
-
         // เก็บ user ปกติลง list ก่อน
         useUserListStore
           .getState()
@@ -73,3 +62,5 @@ export const useUserStore = create<UserStore>()(
     { name: "user-storage" }
   )
 );
+
+export { useUserListStore, useUserStore };

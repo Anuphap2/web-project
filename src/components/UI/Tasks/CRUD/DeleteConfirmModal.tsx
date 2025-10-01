@@ -1,12 +1,6 @@
 "use client";
-import { Task } from "@/types/task";
+import { DeleteConfirmModalProps } from "./interface/EditTaskModalProps";
 import Button from "@/components/UI/Button";
-
-interface DeleteConfirmModalProps {
-  task: Task;
-  onClose: () => void;
-  onDelete: () => void;
-}
 
 export default function DeleteConfirmModal({
   task,

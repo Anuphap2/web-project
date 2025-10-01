@@ -31,9 +31,6 @@ export default function RootLayout({
         {children}
         <Footer />
 
-        {/* *** เพิ่ม ToastContainer ตรงนี้ ***
-                  เพื่อให้ Toast แสดงผลได้ทั่วทั้งแอปพลิเคชัน 
-                */}
         <ToastContainer
           position="top-right"
           autoClose={3000}

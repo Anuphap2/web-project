@@ -16,5 +16,5 @@ export default function ExportButton() {
 
   if (level !== "manager") return null; // employee จะไม่เห็นปุ่ม
 
-  return <Button label="Export Excel" onClick={handleExport} />;
+  return <Button className="btn btn-primary" label="Export Excel" onClick={handleExport} />;
 }

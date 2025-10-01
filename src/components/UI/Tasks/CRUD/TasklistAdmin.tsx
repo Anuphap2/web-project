@@ -1,16 +1,12 @@
 "use client";
 import { useState } from "react";
 import { Task } from "@/types/task";
-import { User } from "@/types/users";
 import { useTaskListAll } from "@/hooks/TasklistAdmin";
 import TaskTable from "../Table/TaskTable";
 import EditTaskModal from "./EditTaskModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
-
-interface TasklistProps {
-  tasks: Task[];
-  users: User[]; // รับข้อมูลพนักงานทั้งหมดเป็น props
-}
+import Toast from "@/components/Layout/Toast";
+import { TasklistProps } from "./interface/EditTaskModalProps";
 
 export default function Tasklist({ tasks, users }: TasklistProps) {
   const {
@@ -26,6 +22,11 @@ export default function Tasklist({ tasks, users }: TasklistProps) {
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
+  const [toast, setToast] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
   const [filterText, setFilterText] = useState("");
 
   const filteredTasks = visibleTasks.filter(
@@ -42,6 +43,14 @@ export default function Tasklist({ tasks, users }: TasklistProps) {
 
   return (
     <>
+      {toast && (
+        <Toast
+          message={toast.text}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="mb-4">
         <input
           type="text"
@@ -67,6 +76,7 @@ export default function Tasklist({ tasks, users }: TasklistProps) {
           onClose={() => setEditingTask(null)}
           onSave={saveEdit}
           users={users || []} // ใส่ default เป็น array ว่าง
+          onMessage={setToast}
         />
       )}
 

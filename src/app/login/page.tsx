@@ -1,78 +1,55 @@
 "use client";
-import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import Button from "@/components/UI/Button";
-import { useUserListStore, useUserStore } from "@/store/userStore";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import Image from "next/image";
+import Toast from "@/components/Layout/Toast";
 
 export default function AuthPage() {
-  const { addUser, users } = useUserListStore();
-  const { login } = useUserStore();
-  const router = useRouter();
-
-  const departments = ["HR", "IT", "Marketing", "Finance", "General"];
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [level, setLevel] = useState<"manager" | "employee">("employee");
-  const [department, setDepartment] = useState(departments[0]);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [isSignUp, setIsSignUp] = useState(false);
-
-  const handleAuth = () => {
-    if (!username.trim() || !password.trim()) {
-      setError("กรุณากรอก Username และ Password");
-      setSuccess(null);
-      return;
-    }
-
-    if (isSignUp) {
-      const exists = users.find((u) => u.username === username);
-      if (exists) {
-        setError("Username นี้มีคนใช้แล้ว");
-        setSuccess(null);
-        return;
-      }
-
-      addUser({ username, password, level, department });
-      setSuccess("สมัครสมาชิกสำเร็จ! ล็อกอินอัตโนมัติ...");
-      setError(null);
-
-      login(username, password, level, department);
-      if (level === "manager") router.push("/dashboard");
-      else router.push("/home");
-
-      setUsername("");
-      setPassword("");
-    } else {
-      const user = users.find(
-        (u) => u.username === username && u.password === password
-      );
-      if (!user) {
-        setError("Username หรือ Password ไม่ถูกต้อง");
-        setSuccess(null);
-        return;
-      }
-
-      login(user.username, user.password, user.level, user.department);
-      if (user.level === "manager") router.push("/dashboard");
-      else router.push("/home");
-
-      setError(null);
-      setSuccess(null);
-    }
-  };
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    level,
+    setLevel,
+    department,
+    setDepartment,
+    isSignUp,
+    setIsSignUp,
+    toast,
+    setToast,
+    departments,
+    handleAuth,
+  } = useAuth();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#ff8198]/30 via-white to-white p-4">
+      {toast && (
+        <Toast
+          message={toast.text}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
       <div className="w-full max-w-md rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl p-8 space-y-6 border-t-8 border-black/20">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 font-serif tracking-wide">
-          {isSignUp ? "Sign Up" : "Login"}
-        </h2>
-
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        {success && <p className="text-green-500 text-center">{success}</p>}
+        <div className="flex items-center justify-center">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 font-serif tracking-wide">
+              TasksFlow
+            </h1>
+            <p className="text-gray-500 text-center">
+              {" "}
+              {isSignUp ? "Sign Up" : "Login"} ระบบจัดการงานสำหรับคุณ
+            </p>
+          </div>
+          <Image
+            src={"/tasksflow.png"}
+            alt="Logo"
+            width={100}
+            height={100}
+          ></Image>
+        </div>
 
         {/* Username */}
         <div className="relative">
@@ -151,11 +128,9 @@ export default function AuthPage() {
         <p className="text-center text-gray-600 mt-2">
           {isSignUp ? "มีบัญชีแล้ว?" : "ยังไม่มีบัญชี?"}
           <button
-            className="text-[#ff8198] font-semibold underline ml-1"
+            className="text-[#ff8198] cursor-pointer font-semibold underline ml-1"
             onClick={() => {
               setIsSignUp(!isSignUp);
-              setError(null);
-              setSuccess(null);
             }}
           >
             {isSignUp ? "Login" : "Sign Up"}
