@@ -162,6 +162,7 @@ export default function EmployeeTaskTable({ tasks }: EmployeeTaskTableProps) {
       style: {
         minHeight: "50px",
         fontSize: "14px",
+        padding: "10px",
         borderBottom: "1px solid #e5e7eb",
       },
     },

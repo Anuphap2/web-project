@@ -29,8 +29,9 @@ export function useTaskListAll(tasks: Task[]) {
     status?: Task["status"];
     assignees?: string[];
     maxAssignees?: number;
+    dateEnd?: string;
   }) => {
-    const { task, title, description, status, assignees, maxAssignees } = params;
+    const { task, title, description, status, assignees, maxAssignees, dateEnd } = params;
 
     updateTask({
       ...task,
@@ -39,9 +40,11 @@ export function useTaskListAll(tasks: Task[]) {
       status: status ?? task.status,
       assignees: assignees ?? task.assignees,
       maxAssignees: maxAssignees ?? task.maxAssignees,
+      dateEnd: dateEnd ?? task.dateEnd, // <-- เพิ่มตรงนี้
       updatedAt: new Date().toISOString(),
     });
   };
+
 
   const removeTask = (id: string) => {
     deleteTask(id);

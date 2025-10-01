@@ -57,6 +57,7 @@ export function useGetNewTasks(tasks: Task[]) {
             ...task,
             assignees: [...assignees, username!],
             status: "In Progress",
+
             updatedAt: new Date().toISOString(),
         });
     };

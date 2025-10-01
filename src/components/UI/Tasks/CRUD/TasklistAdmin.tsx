@@ -1,12 +1,17 @@
 "use client";
 import { useState } from "react";
 import { Task } from "@/types/task";
+import { User } from "@/types/users";
 import { useTaskListAll } from "@/hooks/TasklistAdmin";
 import TaskTable from "../Table/TaskTable";
 import EditTaskModal from "./EditTaskModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import Toast from "@/components/Layout/Toast";
-import { TasklistProps } from "./interface/EditTaskModalProps";
+
+interface TasklistProps {
+  tasks: Task[];
+  users: User[]; // รับข้อมูลพนักงานทั้งหมดเป็น props
+}
 
 export default function Tasklist({ tasks, users }: TasklistProps) {
   const {
@@ -22,12 +27,11 @@ export default function Tasklist({ tasks, users }: TasklistProps) {
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
+  const [filterText, setFilterText] = useState("");
   const [toast, setToast] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
-
-  const [filterText, setFilterText] = useState("");
 
   const filteredTasks = visibleTasks.filter(
     (task) =>

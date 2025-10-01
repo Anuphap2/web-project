@@ -34,7 +34,9 @@ export default function EditTaskModal({
     setDueDate(task.dateEnd || "");
   }, [task]);
 
-  const allUsersInDept = users.filter((u) => u.department === task.department).map((u) => u.username);
+  const allUsersInDept = users
+    .filter((u) => u.department === task.department)
+    .map((u) => u.username);
 
   const handleSave = () => {
     if (!title.trim()) {
@@ -59,6 +61,7 @@ export default function EditTaskModal({
         maxAssignees,
         dateEnd: dueDate,
       });
+      console.log(dueDate);
       onMessage?.({ type: "success", text: "แก้ไข Task สำเร็จ!" });
       onClose();
     } catch {

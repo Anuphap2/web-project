@@ -21,9 +21,5 @@ export interface DeleteConfirmModalProps {
   task: Task;
   onClose: () => void;
   onDelete: () => void;
-}
-
-export interface TasklistProps {
-  tasks: Task[];
-  users: User[]; // รับข้อมูลพนักงานทั้งหมดเป็น props
+  onMessage?: (type: "success" | "error", message: string) => void;
 }
