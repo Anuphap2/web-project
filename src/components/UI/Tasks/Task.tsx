@@ -37,6 +37,8 @@ export default function Tasks({ tasks }: TaskListProps) {
   const [showFullDescMap, setShowFullDescMap] = useState<{
     [key: string]: boolean;
   }>({});
+
+  
   const [search, setSearch] = useState("");
   const [sortByDate, setSortByDate] = useState<"asc" | "desc" | null>(null);
 
@@ -56,7 +58,7 @@ export default function Tasks({ tasks }: TaskListProps) {
 
     return filtered;
   }, [originalVisibleTasks, search, sortByDate]);
-  
+
   if (!username) return null;
 
   const toggleDesc = (taskId: string) => {
@@ -97,7 +99,7 @@ export default function Tasks({ tasks }: TaskListProps) {
           placeholder="ค้นหาหัวข้องาน..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="input input-bordered flex-1"
+          className="input input- input-bordered flex-1"
         />
         <select
           className="select select-bordered w-40"

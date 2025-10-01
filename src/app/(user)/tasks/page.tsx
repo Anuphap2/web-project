@@ -1,7 +1,7 @@
 "use client";
 import { useTaskStore } from "@/store/Tasks/taskStore";
 import { useUserStore } from "@/store/userStore";
-import EmployeeTaskTable from "@/components/UI/Tasks/TaskItemUser"; // Assume this component exists
+import EmployeeTaskTable from "@/components/UI/Tasks/Table/TaskItemUser"; // Assume this component exists
 import TaskSummary from "@/components/UI/Tasks/TaskSumUser"; // Assume this component exists
 
 export default function MyTasksPage() {

@@ -1,9 +1,6 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 export default function HomePage() {
   const router = useRouter();
@@ -20,19 +17,11 @@ export default function HomePage() {
       />
     </svg>
   );
-  useEffect(() => {
-    AOS.init({ duration: 800, once: true, easing: "ease-in-out" });
-  }, []);
-
   return (
     <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
       <section className="min-h-screen snap-start relative overflow-hidden py-10 sm:py-16 bg-landing">
         {/* Logo */}
-        <div
-          className="absolute top-5 left-5 sm:top-10 sm:left-10 z-10"
-          data-aos="fade-down"
-          data-aos-delay="100"
-        >
+        <div className="absolute top-5 left-5 sm:top-10 sm:left-10 z-10">
           <Image
             src="/tasksflow.png"
             alt="Logo"
@@ -44,10 +33,7 @@ export default function HomePage() {
 
         <div className="relative max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-8 pt-10 sm:pt-16">
           {/* Text */}
-          <div
-            className="mt-16 sm:mt-24 lg:mt-40 max-w-full lg:max-w-lg order-2 lg:order-1"
-            data-aos="fade-right"
-          >
+          <div className="mt-16 sm:mt-24 lg:mt-40 max-w-full lg:max-w-lg order-2 lg:order-1">
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold mb-4 sm:mb-10 text-white font-serif leading-tight lg:leading-none">
               T
               <span className="relative">
@@ -69,8 +55,6 @@ export default function HomePage() {
           <div
             className="relative w-full aspect-[4/5] max-w-sm sm:max-w-md justify-self-center 
       lg:justify-self-end mt-4 sm:mt-16 lg:mt-24 order-1 lg:order-2"
-            data-aos="zoom-in"
-            data-aos-delay="200"
           >
             {/* Blob Layer */}
             <GreenBlob className="absolute inset-0 w-full h-full text-green-300 overflow-visible" />
@@ -92,8 +76,6 @@ export default function HomePage() {
                   onClick={() => router.push("/login")}
                   className="btn bg-black text-white hover:bg-gray-800 border-0 btn-md sm:btn-lg 
          rounded-full px-10 sm:px-16 text-xs sm:text-sm font-bold tracking-widest shadow-lg"
-                  data-aos="zoom-in"
-                  data-aos-delay="400"
                 >
                   เริ่มต้นใช้งาน
                 </button>
@@ -140,7 +122,10 @@ export default function HomePage() {
 
       <section className="hero snap-start bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          <img
+          <Image
+            alt="Box Office"
+            width={500}
+            height={500}
             src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
             className="max-w-sm rounded-lg shadow-2xl"
           />
