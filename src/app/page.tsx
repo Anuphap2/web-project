@@ -1,57 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FiEdit3, FiUsers, FiBarChart2, FiList } from "react-icons/fi";
 import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
-// --- Feature Data Array ---
-const featuresData = [
-  {
-    title: "📝 สร้างงานอย่างรวดเร็ว",
-    desc: "สร้างงานใหม่ ระบุวันที่, ลำดับความสำคัญ และรายละเอียดงานในที่เดียว",
-    icon: FiEdit3,
-  },
-  {
-    title: "👥 มอบหมายและติดตาม",
-    desc: "มอบหมายงานให้ทีม กำหนดผู้รับผิดชอบและติดตามสถานะงานแบบเรียลไทม์",
-    icon: FiUsers,
-  },
-  {
-    title: "📊 วิเคราะห์แดชบอร์ด",
-    desc: "ดูภาพรวมและประสิทธิภาพการทำงานของทีมด้วยรายงานวิเคราะห์ผล",
-    icon: FiBarChart2,
-  },
-  {
-    title: "📋 รายการงานรวมศูนย์",
-    desc: "ดูงานทั้งหมดในแผนกหรือโปรเจกต์ของคุณเพื่อจัดการงานได้ง่ายขึ้น",
-    icon: FiList,
-  },
-];
-
-// --- Feature Card Component ---
-type FeatureCardProps = {
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  title: string;
-  desc: string;
-  delay: number;
-};
-const FeatureCard = ({ icon: Icon, title, desc, delay }: FeatureCardProps) => (
-  <div
-    className="card bg-gray-50 min-h-[200px] h-auto rounded-xl shadow-lg p-6 sm:p-8 border-t-8 border-black/50"
-    data-aos="fade-up"
-    data-aos-delay={delay}
-  >
-    <div className="text-black/80 mb-4">
-      <Icon className="w-6 h-6 sm:w-8 sm:h-8 mx-auto" />
-    </div>
-    <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900">
-      {title}
-    </h3>
-    <p className="text-xs sm:text-sm text-gray-600">{desc}</p>
-  </div>
-);
 
 export default function HomePage() {
   const router = useRouter();
@@ -73,8 +25,8 @@ export default function HomePage() {
   }, []);
 
   return (
-    <>
-      <section className="min-h-screen relative overflow-hidden py-10 sm:py-16 bg-landing">
+    <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
+      <section className="min-h-screen snap-start relative overflow-hidden py-10 sm:py-16 bg-landing">
         {/* Logo */}
         <div
           className="absolute top-5 left-5 sm:top-10 sm:left-10 z-10"
@@ -149,22 +101,44 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Features */}
-        <div className="relative max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-12 mt-16 lg:mt-52 pb-16">
-          {featuresData.slice(0, 3).map((feature, i) => (
-            <FeatureCard
-              key={i}
-              icon={feature.icon}
-              title={feature.title}
-              desc={feature.desc}
-              delay={i * 200} // delay เป็น ms
-            />
-          ))}
+      {/* Features */}
+      <section className="min-h-screen snap-start bg-landing px-6 py-16">
+        <h1 className="text-3xl font-bold text-center mb-12">Features</h1>
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="bg-gray-50 min-h-[200px] rounded-xl shadow-lg p-6 sm:p-8 border-t-8 border-black/50">
+            <div className="text-black/80 mb-4">📌</div>
+            <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900">
+              Feature 1
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-600">
+              รายละเอียด Feature 1
+            </p>
+          </div>
+          <div className="bg-gray-50 min-h-[200px] rounded-xl shadow-lg p-6 sm:p-8 border-t-8 border-black/50">
+            <div className="text-black/80 mb-4">📌</div>
+            <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900">
+              Feature 2
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-600">
+              รายละเอียด Feature 2
+            </p>
+          </div>
+          <div className="bg-gray-50 min-h-[200px] rounded-xl shadow-lg p-6 sm:p-8 border-t-8 border-black/50">
+            <div className="text-black/80 mb-4">📌</div>
+            <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900">
+              Feature 3
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-600">
+              รายละเอียด Feature 3
+            </p>
+          </div>
         </div>
       </section>
 
-      <div className="hero bg-base-200 min-h-screen">
+      <section className="hero snap-start bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <img
             src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
@@ -180,7 +154,7 @@ export default function HomePage() {
             <button className="btn btn-primary">Get Started</button>
           </div>
         </div>
-      </div>
-    </>
+      </section>
+    </div>
   );
 }
