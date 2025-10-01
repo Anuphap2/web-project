@@ -68,7 +68,7 @@ export default function HomePage() {
           {/* Graphic Box */}
           <div
             className="relative w-full aspect-[4/5] max-w-sm sm:max-w-md justify-self-center 
-             lg:justify-self-end mt-4 sm:mt-16 lg:mt-24 order-1 lg:order-2"
+      lg:justify-self-end mt-4 sm:mt-16 lg:mt-24 order-1 lg:order-2"
             data-aos="zoom-in"
             data-aos-delay="200"
           >
@@ -91,7 +91,7 @@ export default function HomePage() {
                 <button
                   onClick={() => router.push("/login")}
                   className="btn bg-black text-white hover:bg-gray-800 border-0 btn-md sm:btn-lg 
-                   rounded-full px-10 sm:px-16 text-xs sm:text-sm font-bold tracking-widest shadow-lg"
+         rounded-full px-10 sm:px-16 text-xs sm:text-sm font-bold tracking-widest shadow-lg"
                   data-aos="zoom-in"
                   data-aos-delay="400"
                 >
