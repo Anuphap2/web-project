@@ -6,39 +6,35 @@ export function useEmployeeTasks(tasks: Task[]) {
   const { username } = useUserStore();
   const updateTask = useTaskStore((state) => state.updateTask);
 
-  if (!username) return { username: null, visibleTasks: [], handleToggleComplete: () => {}, handleUnassign: () => {} };
-
-  // filter งานที่พนักงานเห็นได้ (ตัวเองเป็น assignee)
-  const visibleTasks = tasks.filter((task) => {
-    const assignees = task.assignees || [];
-    return assignees.includes(username);
-  });
-
   const handleToggleComplete = (task: Task) => {
-    const assignees = task.assignees || [];
-    if (!assignees.includes(username)) return;
+    if (!username || !(task.assignees?.includes(username))) return;
 
-    const newStatus = task.status === "Completed" ? "In Progress" : "Completed";
-    updateTask({
+    const updatedTask: Task = {
       ...task,
-      status: newStatus,
+      status: task.status === "Completed" ? "In Progress" : "Completed",
       updatedAt: new Date().toISOString(),
-    });
+    };
+
+    updateTask(updatedTask);
   };
 
   const handleUnassign = (task: Task) => {
-    if (task.status !== "In Progress") return;
+    if (!username || task.status !== "In Progress") return;
 
     const newAssignees = (task.assignees || []).filter((u) => u !== username);
-    const newStatus = newAssignees.length === 0 ? "No Assignee" : task.status;
-
-    updateTask({
+    const updatedTask: Task = {
       ...task,
       assignees: newAssignees,
-      status: newStatus,
+      status: newAssignees.length === 0 ? "No Assignee" : task.status,
       updatedAt: new Date().toISOString(),
-    });
+    };
+
+    updateTask(updatedTask);
   };
+
+  const visibleTasks = username
+    ? tasks.filter((task) => task.assignees?.includes(username))
+    : [];
 
   return { username, visibleTasks, handleToggleComplete, handleUnassign };
 }

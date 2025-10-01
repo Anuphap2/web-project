@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useUserStore, useUserListStore } from "@/store/userStore";
 import { useTaskStore } from "@/store/Tasks/taskStore";
 
-export function useAddTaskForm() {
+export function useAddTaskForm(setToast?: (toast: { type: "success" | "error"; text: string }) => void) {
   const { username, department } = useUserStore();
   const users = useUserListStore((state) => state.users);
   const addTask = useTaskStore((state) => state.addTask);
@@ -13,36 +13,47 @@ export function useAddTaskForm() {
   const [maxAssignees, setMaxAssignees] = useState(1);
   const [dueDate, setDueDate] = useState("");
 
-  const departmentUsers = users.filter((u) => u.department === department);
+  const departmentUsers = useMemo(
+    () => users.filter((u) => u.department === department),
+    [users, department]
+  );
 
-  const handleAddTask = (assignees?: string[]) => { // ✅ รับ argument
-    const finalAssignees = assignees || assignedTo;
+  const handleAddTask = (assignees?: string[]) => {
+    const finalAssignees = assignees ?? assignedTo;
 
-    if (!title) return alert("กรุณาใส่หัวข้อ task");
-    if (finalAssignees.length > maxAssignees)
-      return alert(`จำนวนผู้รับผิดชอบสูงสุดคือ ${maxAssignees} คน`);
+    if (!title.trim()) {
+      setToast?.({ type: "error", text: "กรุณาใส่หัวข้อ task" });
+      return;
+    }
+
+    if (finalAssignees.length > maxAssignees) {
+      setToast?.({ type: "error", text: `จำนวนผู้รับผิดชอบสูงสุดคือ ${maxAssignees} คน` });
+      return;
+    }
 
     addTask({
       id: Date.now().toString(),
-      title,
-      description,
-      status: finalAssignees.length ? "In Progress" : "No Assignee", // ปรับให้ตรง enum ของคุณ
+      title: title.trim(),
+      description: description.trim(),
+      status: finalAssignees.length ? "In Progress" : "No Assignee",
       createdBy: username!,
       department: department!,
       assignedTo: finalAssignees.length === 1 ? finalAssignees[0] : undefined,
-      maxAssignees,
       assignees: finalAssignees,
+      maxAssignees,
       dateEnd: dueDate || undefined,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
 
+    setToast?.({ type: "success", text: "สร้างงานสำเร็จ" });
+
     // reset form
     setTitle("");
     setDescription("");
     setAssignedTo([]);
-    setDueDate("");
     setMaxAssignees(1);
+    setDueDate("");
   };
 
   return {
@@ -60,4 +71,3 @@ export function useAddTaskForm() {
     handleAddTask,
   };
 }
-

@@ -10,9 +10,16 @@
   --color-bg: #ffffff;
   --color-text: #000000;
   --color-card: #f3f4f6; /* Tailwind gray-100 */
+  --color-bgGradient: linear-gradient(-180deg, #ff8198, #f9d9df, #fafef8);
 }
 
-/* Global styles */
+.bg-nav {
+  @apply bg-gradient-to-r from-[#ff8198]/20 via-white to-white/20;
+}
+
+.bg-landing {
+  background: var(--color-bgGradient);
+}
 
 html {
   font-family: "Noto Sans Thai", sans-serif;
@@ -30,13 +37,4 @@ body {
   padding: 1rem;
   border-radius: 0px;
   transition: background-color 0.3s;
-}
-
-.bg-landing {
-  background-image: linear-gradient(
-    to top,
-    #fafef8 6%,
-    #f9d9df 50%,
-    #ff8198 85%
-  );
 }

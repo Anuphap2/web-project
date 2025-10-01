@@ -7,16 +7,16 @@ export function useTaskListAll(tasks: Task[]) {
   const updateTask = useTaskStore((state) => state.updateTask);
   const deleteTask = useTaskStore((state) => state.deleteTask);
 
-  // --- actions ---
+  // --- Actions ---
   const claimTask = (task: Task) => {
-    if (level === "manager") return;
+    if (level === "manager" || !username) return;
 
     const assignees = task.assignees || [];
     if (task.maxAssignees && assignees.length >= task.maxAssignees) return;
 
     updateTask({
       ...task,
-      assignees: [...assignees, username!],
+      assignees: [...assignees, username],
       status: "In Progress",
       updatedAt: new Date().toISOString(),
     });
@@ -47,16 +47,18 @@ export function useTaskListAll(tasks: Task[]) {
     deleteTask(id);
   };
 
-  // --- filter tasks ---
-  const visibleTasks =
-    level === "manager"
-      ? tasks
-      : tasks.filter((task) => {
-          const assignees = task.assignees || [];
-          const isFull = task.maxAssignees ? assignees.length >= task.maxAssignees : false;
-          const hasUser = assignees.includes(username!);
-          return !(hasUser || isFull);
-        });
+  // --- Filter tasks ---
+  const visibleTasks = tasks.filter((task) => {
+    if (level === "manager") return true;
+    if (!username) return false;
+
+    const assignees = task.assignees || [];
+    const isFull = task.maxAssignees ? assignees.length >= task.maxAssignees : false;
+    const hasUser = assignees.includes(username);
+
+    // พนักงานจะเห็นเฉพาะงานที่ยังไม่ได้ assign หรือยังไม่เต็ม
+    return !(hasUser || isFull);
+  });
 
   return {
     username,
@@ -67,4 +69,3 @@ export function useTaskListAll(tasks: Task[]) {
     removeTask,
   };
 }
-

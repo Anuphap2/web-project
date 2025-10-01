@@ -1,19 +1,19 @@
-export type UserLevel = "manager" | "employee";
+type UserLevel = "manager" | "employee";
 
-export type User = {
+type User = {
   username: string;
   password: string;
   level: UserLevel;
   department: string;
 };
 
-export type UserDataTable = {
+type UserDataTable = {
   username: string;
   level: string;
   department: string;
 }
 
-export type UserStore = {
+type UserStore = {
   username: string | null;
   password: string | null;
   level: UserLevel | null;
@@ -22,12 +22,15 @@ export type UserStore = {
   logout: () => void;
 };
 
-export type UserListStore = {
+type UserListStore = {
   users: User[];
   addUser: (user: User) => void;
   updateUser: (user: User) => void
   deleteUser: (username: string) => void;
 };
+
+
+export type { User, UserLevel, UserStore, UserListStore, UserDataTable };
 
 
 

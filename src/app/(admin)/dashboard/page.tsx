@@ -16,10 +16,12 @@ export default function HomePage() {
   return (
     <div className="p-8 space-y-8">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold">
-          Manager {username} - {department} Dashboard
-        </h1>
-        <ExportButton />
+        <div className="flex justify-between">
+          <h1 className="text-3xl font-bold">
+            Manager {username} - {department} Dashboard
+          </h1>
+          <ExportButton />
+        </div>
       </header>
 
       {/* 1. Task Summary */}

@@ -1,32 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Task } from "@/types/task";
-import { User } from "@/types/users";
 import Button from "@/components/UI/Button";
 import Toast from "@/components/Layout/Toast";
 import Modal from "@/components/UI/Modal";
 import { FaUser } from "react-icons/fa";
-
-interface EditTaskModalProps {
-  task: Task;
-  onClose: () => void;
-  onSave: (data: {
-    task: Task;
-    title: string;
-    description: string;
-    status: Task["status"];
-    assignees: string[];
-    maxAssignees: number;
-    dateEnd?: string;
-  }) => void;
-  users: User[]; // รับ array ของพนักงานจริง
-}
+import { EditTaskModalProps } from "./interface/EditTaskModalProps";
 
 export default function EditTaskModal({
   task,
   onClose,
   onSave,
   users,
+  onMessage,
 }: EditTaskModalProps) {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description || "");
@@ -48,18 +34,18 @@ export default function EditTaskModal({
     setDueDate(task.dateEnd || "");
   }, [task]);
 
-  // เอาพนักงานทั้งหมดในแผนกของ task
-  const allUsersInDept = users
-    .filter((u) => u.department === task.department)
-    .map((u) => u.username);
+  const allUsersInDept = users.filter((u) => u.department === task.department).map((u) => u.username);
 
   const handleSave = () => {
     if (!title.trim()) {
-      setError("กรุณากรอก Title");
+      onMessage?.({ type: "error", text: "กรุณากรอก Title" });
       return;
     }
     if (assignees.length > maxAssignees) {
-      setError(`จำนวนผู้รับผิดชอบสูงสุดคือ ${maxAssignees} คน`);
+      onMessage?.({
+        type: "error",
+        text: `จำนวนผู้รับผิดชอบสูงสุดคือ ${maxAssignees} คน`,
+      });
       return;
     }
 
@@ -73,13 +59,10 @@ export default function EditTaskModal({
         maxAssignees,
         dateEnd: dueDate,
       });
-      setTimeout(() => {
-        setSuccess(null);
-        onClose();
-      }, 1000);
-      setSuccess("แก้ไข Task สำเร็จ!");
+      onMessage?.({ type: "success", text: "แก้ไข Task สำเร็จ!" });
+      onClose();
     } catch {
-      setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      onMessage?.({ type: "error", text: "เกิดข้อผิดพลาด กรุณาลองใหม่" });
     }
   };
 

@@ -2,64 +2,67 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { Task } from "@/types/task";
 
-export const exportTasksToExcel = (tasks: Task[]) => {
-  // 1️⃣ Sheet Tasks
-  const worksheetData = tasks.map((t) => {
-    let delayStatus = "-"; // default สำหรับงานที่ยังไม่เสร็จ
-    if (t.status === "Completed" && t.dateEnd) {
-      delayStatus = new Date(t.updatedAt) > new Date(t.dateEnd) ? "ล่าช้า" : "ทันเวลา";
-    }
+const formatDate = (dateStr?: string, withTime = true) => {
+  if (!dateStr) return "";
+  const options: Intl.DateTimeFormatOptions = withTime
+    ? { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }
+    : { year: "numeric", month: "2-digit", day: "2-digit" };
+  return new Intl.DateTimeFormat("th-TH", options).format(new Date(dateStr));
+};
 
-    return {
-      รหัสงาน: t.id,
-      หัวข้อ: t.title,
-      รายละเอียด: t.description || "",
-      สถานะการทำงาน: t.status,
-      ผู้ที่รับผิดชอบ: t.assignees && t.assignees.length > 0
-        ? t.assignees.join(", ")
-        : "ยังไม่ได้รับงาน",
-      แผนก: t.department,
-      สร้างโดย: t.createdBy,
-      สร้างงานวันที่: new Date(t.createdAt).toLocaleString(),
-      สิ้นสุดวันที่: t.dateEnd ? new Date(t.dateEnd).toLocaleDateString() : "",
-      อัพเดทล่าสุด: new Date(t.updatedAt).toLocaleString(),
-      สถานะการล่าช้า: delayStatus,
-    };
-  });
+const getDelayStatus = (task: Task) => {
+  if (task.status !== "Completed" || !task.dateEnd) return "-";
+  return new Date(task.updatedAt) > new Date(task.dateEnd) ? "ล่าช้า" : "ทันเวลา";
+};
 
-  const taskSheet = XLSX.utils.json_to_sheet(worksheetData);
-
-  // 2️⃣ Sheet Summary
+const generateSummary = (tasks: Task[]) => {
   const summary = {
-    "No Assignee": 0,
-    "In Progress": 0,
-    Completed: 0,
+    "ยังไม่ได้รับงาน": 0,
+    "กำลังดำเนินการ": 0,
+    "เสร็จสมบูรณ์": 0,
   };
 
   tasks.forEach((t) => {
-    if (t.status in summary) summary[t.status as keyof typeof summary]++;
+    if (t.status === "No Assignee") summary["ยังไม่ได้รับงาน"]++;
+    else if (t.status === "In Progress") summary["กำลังดำเนินการ"]++;
+    else if (t.status === "Completed") summary["เสร็จสมบูรณ์"]++;
   });
 
-  const summarySheet = XLSX.utils.json_to_sheet([
-    { สถานะ: "ยังไม่ได้รับงาน", จำนวน: summary["No Assignee"] },
-    { สถานะ: "กำลังดำเนินการ", จำนวน: summary["In Progress"] },
-    { สถานะ: "เสร็จสมบูรณ์", จำนวน: summary["Completed"] },
+  return [
+    { สถานะ: "ยังไม่ได้รับงาน", จำนวน: summary["ยังไม่ได้รับงาน"] },
+    { สถานะ: "กำลังดำเนินการ", จำนวน: summary["กำลังดำเนินการ"] },
+    { สถานะ: "เสร็จสมบูรณ์", จำนวน: summary["เสร็จสมบูรณ์"] },
     { สถานะ: "รวมทั้งหมด", จำนวน: tasks.length },
-  ]);
+  ];
+};
 
-  // 3️⃣ สร้าง Workbook
+export const exportTasksToExcel = (tasks: Task[]) => {
+  const taskSheetData = tasks.map((t) => ({
+    รหัสงาน: t.id,
+    หัวข้อ: t.title,
+    รายละเอียด: t.description || "",
+    สถานะการทำงาน: t.status,
+    ผู้ที่รับผิดชอบ: t.assignees?.join(", ") || "ยังไม่มีผู้ที่รับผิดชอบ",
+    แผนก: t.department,
+    สร้างโดย: t.createdBy,
+    สร้างงานวันที่: formatDate(t.createdAt),
+    สิ้นสุดวันที่: formatDate(t.dateEnd, false),
+    อัพเดทล่าสุด: formatDate(t.updatedAt),
+    สถานะการล่าช้า: getDelayStatus(t),
+  }));
+
+  const taskSheet = XLSX.utils.json_to_sheet(taskSheetData);
+  const summarySheet = XLSX.utils.json_to_sheet(generateSummary(tasks));
+
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, taskSheet, "Tasks");
   XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
 
-  // 4️⃣ Export
   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+
   const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, "0"); // เดือนต้อง +1
-  const dd = String(today.getDate()).padStart(2, "0");
+  const fileName = `tasks_${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}.xlsx`;
 
-  saveAs(data, `tasks_${yyyy}-${mm}-${dd}.xlsx`); // tasks_2025-09-29.xlsx
-
+  saveAs(blob, fileName);
 };
