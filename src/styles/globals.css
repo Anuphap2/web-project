@@ -5,13 +5,20 @@
   themes: light --default;
 }
 
+html,
+body,
+#__next {
+  height: 100%;
+  overflow-y: auto;
+}
+
 /* Root variables (ถ้าอยากใช้ theme color แบบ custom) */
 :root {
   --color-bg: #ffffff;
   --color-text: #000000;
   --color-card: #f3f4f6; /* Tailwind gray-100 */
   --color-bgGradient: linear-gradient(-180deg, #ff8198, #f9d9df, #fafef8);
-  --color-bg: #ff8198;
+  --color-bgLanding: #ff8198;
 }
 
 .bg-nav {
@@ -19,10 +26,8 @@
 }
 
 .bg-landing {
-  background: var(--color-bg);
+  background: var(--color-bgLanding);
 }
-
-
 
 html {
   font-family: "Noto Sans Thai", sans-serif;
