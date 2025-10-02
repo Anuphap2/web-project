@@ -22,7 +22,7 @@ export default function HomePage() {
             </h1>
             <p className="text-lg text-gray-500 mb-4">ระบบจัดการงานสำหรับคุณ</p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div className="flex items-center gap-4 mt-4">
               {/* Level Badge */}
               <div className="badge badge-lg badge-primary flex items-center justify-start gap-2 p-3 transition-all hover:scale-105">
                 <span className="font-medium">ตำแหน่ง:</span>

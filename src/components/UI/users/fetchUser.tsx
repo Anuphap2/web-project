@@ -36,11 +36,11 @@ export default function DepartmentUserTable() {
   const currentUsername = useUserStore((state) => state.username);
 
   const columns: TableColumn<UserDataTable>[] = [
-    { name: "Username", selector: (row) => row.username, sortable: true },
-    { name: "Level", selector: (row) => row.level, sortable: true },
-    { name: "Department", selector: (row) => row.department, sortable: true },
+    { name: "ชื่อผู้ใช้", selector: (row) => row.username, sortable: true },
+    { name: "ระดับ", selector: (row) => row.level, sortable: true },
+    { name: "แผนก", selector: (row) => row.department, sortable: true },
     {
-      name: "Actions",
+      name: "การกระทำ",
       cell: (row) => {
         // ถ้า current user เป็น manager หรือ row เป็น manager/ตัวเอง → ซ่อนปุ่ม
         if (
@@ -51,8 +51,8 @@ export default function DepartmentUserTable() {
         }
         return (
           <Button
-            className="btn-error"
-            label="Delete"
+            className="btn-error text-white"
+            label="ลบ"
             onClick={() => confirmDelete(row)}
           />
         );
@@ -116,7 +116,7 @@ export default function DepartmentUserTable() {
             onClick={() => setUserToDelete(null)}
           />
           <Button
-            className="btn-error"
+            className="btn-error text-white"
             label="ลบผู้ใช้งาน"
             onClick={handleDelete}
           />
