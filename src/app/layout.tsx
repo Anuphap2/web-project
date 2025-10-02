@@ -26,10 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light" data-scroll-behavior="smooth">
-      <body className={`antialiased`}>
+      <body className="antialiased flex min-h-screen flex-col">
         <Navbar />
-        {children}
-        <Footer />
+        <main>
+          {children}
+          <Footer />
+        </main>
 
         <ToastContainer
           position="top-right"

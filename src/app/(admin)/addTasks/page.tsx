@@ -3,6 +3,7 @@ import { useAddTaskForm } from "@/hooks/TaskFormAdmin";
 import { useState } from "react";
 import Toast from "@/components/Layout/Toast";
 import { taskSchema } from "@/schema/taskSchema";
+import useCheckUser from "@/hooks/checkLogin";
 
 export default function AddTaskForm() {
   const {
@@ -21,6 +22,10 @@ export default function AddTaskForm() {
   const [assignedToMulti, setAssignedToMulti] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const { isAuthorized, isLoaded } = useCheckUser({ requiredRole: "manager" });
+  if (!isLoaded) return <p>กำลังโหลด...</p>;
+  if (!isAuthorized) return null;
 
   const onSubmit = () => {
     const result = taskSchema.safeParse({

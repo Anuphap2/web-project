@@ -79,10 +79,6 @@ export default function DepartmentUserTable() {
 
   return (
     <div className="p-4 bg-white rounded-xl shadow-lg">
-      <h2 className="text-xl font-bold mb-4">
-        Users in Department: {department}
-      </h2>
-
       <div className="mb-4">
         <input
           type="text"
@@ -116,10 +112,14 @@ export default function DepartmentUserTable() {
         <div className="modal-action justify-end gap-2 mt-4">
           <Button
             className="secondary"
-            label="Cancel"
+            label="ยกเลิก"
             onClick={() => setUserToDelete(null)}
           />
-          <Button className="btn-error" label="Delete" onClick={handleDelete} />
+          <Button
+            className="btn-error"
+            label="ลบผู้ใช้งาน"
+            onClick={handleDelete}
+          />
         </div>
       </Modal>
     </div>

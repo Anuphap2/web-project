@@ -28,9 +28,9 @@ export default function TaskTable({
   };
 
   const columns: TableColumn<Task>[] = [
-    { name: "Title", selector: (row) => row.title, sortable: true },
+    { name: "หัวข้อ", selector: (row) => row.title, sortable: true },
     {
-      name: "Description",
+      name: "รายละเอียด",
       cell: (row) => {
         const isExpanded = expandedRows[row.id] || false;
         const text = row.description || "-";
@@ -52,25 +52,60 @@ export default function TaskTable({
       },
       wrap: true,
     },
-    { name: "Status", selector: (row) => row.status, sortable: true },
     {
-      name: "Assignees",
+      name: "สถานะ",
+      sortable: true,
+      cell: (row) => {
+        let bgColor = "#f3f4f6"; // สีพื้น default
+        let textColor = "black"; // สีตัวอักษร
+
+        if (row.status === "Completed") {
+          bgColor = "#d1fae5";
+          textColor = "#065f46";
+        } else if (row.status === "In Progress") {
+          bgColor = "#ffedd5"; // ส้มอ่อน
+          textColor = "#b45309"; // ส้มเข้ม
+        } else if (row.status === "No Assignee") {
+          bgColor = "#fee2e2"; // แดงอ่อน
+          textColor = "#b91c1c"; // แดงเข้ม
+        }
+
+        return (
+          <span
+            style={{
+              backgroundColor: bgColor,
+              color: textColor,
+              fontWeight: "bold",
+              padding: "4px 8px",
+              borderRadius: "12px",
+              display: "inline-block",
+              textAlign: "center",
+              minWidth: "80px",
+            }}
+          >
+            {row.status}
+          </span>
+        );
+      },
+    },
+    {
+      name: "ผู้รับผิดชอบ",
       selector: (row) => (row.assignees || []).join(", "),
       wrap: true,
     },
     {
-      name: "End Date",
+      name: "วันสิ้นสุด",
       selector: (row) =>
         row.dateEnd ? new Date(row.dateEnd).toLocaleDateString() : "-",
       sortable: true,
     },
     {
-      name: "Updated At",
+      name: "อัปเดตล่าสุด",
       selector: (row) => new Date(row.updatedAt).toLocaleString(),
       sortable: true,
     },
     {
-      name: "Actions",
+      name: "การกระทำ",
       cell: (row) => {
         const isAssigned = (row.assignees || []).includes(username);
         return (
@@ -100,7 +135,6 @@ export default function TaskTable({
           </div>
         );
       },
-
       ignoreRowClick: true,
     },
   ];
@@ -126,7 +160,6 @@ export default function TaskTable({
 
   return (
     <div className="p-4 bg-white rounded-xl shadow-lg overflow-x-auto">
-      <h2 className="text-xl font-bold mb-4">Task List</h2>
       <DataTable
         columns={columns}
         data={tasks}
