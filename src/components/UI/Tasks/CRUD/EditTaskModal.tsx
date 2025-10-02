@@ -70,7 +70,7 @@ export default function EditTaskModal({
   };
 
   return (
-    <Modal isOpen={true} title="Edit Task" onClose={onClose}>
+    <Modal isOpen={true} title="แก้ไขงาน" onClose={onClose}>
       {error && (
         <Toast message={error} type="error" onClose={() => setError(null)} />
       )}
@@ -86,7 +86,7 @@ export default function EditTaskModal({
         {/* Title */}
         <div className="flex flex-col">
           <label className="label">
-            <span className="label-text font-semibold">Title</span>
+            <span className="label-text font-semibold">หัวข้อ</span>
           </label>
           <input
             type="text"
@@ -99,7 +99,7 @@ export default function EditTaskModal({
         {/* Description */}
         <div className="flex flex-col">
           <label className="label">
-            <span className="label-text font-semibold">Description</span>
+            <span className="label-text font-semibold">รายละเอียด</span>
           </label>
           <textarea
             className="textarea textarea-bordered w-full"
@@ -112,7 +112,7 @@ export default function EditTaskModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col">
             <label className="label">
-              <span className="label-text font-semibold">Status</span>
+              <span className="label-text font-semibold">สถานะงาน</span>
             </label>
             <select
               className="select select-bordered w-full"
@@ -126,7 +126,7 @@ export default function EditTaskModal({
           </div>
           <div className="flex flex-col">
             <label className="label">
-              <span className="label-text font-semibold">Due Date</span>
+              <span className="label-text font-semibold">วันสิ้นสุด</span>
             </label>
             <input
               type="date"
@@ -141,7 +141,9 @@ export default function EditTaskModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col">
             <label className="label">
-              <span className="label-text font-semibold">Max Assignees</span>
+              <span className="label-text font-semibold">
+                จํานวนผู้รับผิดชอบ
+              </span>
             </label>
             <input
               type="number"
@@ -153,13 +155,13 @@ export default function EditTaskModal({
           </div>
           <div className="flex flex-col">
             <label className="label">
-              <span className="label-text font-semibold">Assign To</span>
+              <span className="label-text font-semibold">ผู้รับผิดชอบ</span>
             </label>
             <div className="dropdown">
               <label tabIndex={0} className="btn btn-outline w-full text-left">
                 {assignees.length > 0
-                  ? `${assignees.length} assigned`
-                  : "Select assignees"}
+                  ? `จำนวนผู้รับผิดชอบ ${assignees.length} คน`
+                  : "เลือกผู้รับผิดชอบ"}
               </label>
               <ul
                 tabIndex={0}
@@ -200,15 +202,15 @@ export default function EditTaskModal({
             ))
           ) : (
             <span className="badge badge-sm badge-outline text-gray-500">
-              Unassigned
+              ไม่มีผู้รับผิดชอบ
             </span>
           )}
         </div>
 
         {/* Action Buttons */}
         <div className="modal-action justify-end gap-2">
-          <Button className="secondary" label="Cancel" onClick={onClose} />
-          <Button className="btn-primary" label="Save" onClick={handleSave} />
+          <Button className="secondary" label="ยกเลิก" onClick={onClose} />
+          <Button className="btn-primary" label="ยืนยัน" onClick={handleSave} />
         </div>
       </div>
     </Modal>

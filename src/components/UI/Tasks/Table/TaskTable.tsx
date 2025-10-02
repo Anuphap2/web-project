@@ -118,7 +118,7 @@ export default function TaskTable({
                   onClick={() => onEdit(row)}
                 />
                 <Button
-                  className="btn btn-error w-full md:w-auto"
+                  className="btn btn-error w-full md:w-auto text-white"
                   label="ลบงาน"
                   onClick={() => onDelete(row)}
                 />

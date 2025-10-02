@@ -16,11 +16,11 @@ export default function DeleteConfirmModal({
         >
           ✕
         </button>
-        <h3 className="font-bold text-lg mb-4">Confirm Delete</h3>
+        <h3 className="font-bold text-lg mb-4">ยืนยันการลบ {task.title}</h3>
         <p>คุณแน่ใจว่าจะลบงาน {task.title} หรือไม่?</p>
         <div className="modal-action">
-          <Button className="btn secondary" label="Cancel" onClick={onClose} />
-          <Button className="btn btn-error" label="Delete" onClick={onDelete} />
+          <Button className="btn secondary" label="ยกเลิก" onClick={onClose} />
+          <Button className="btn btn-error text-white" label="ยืนยัน" onClick={onDelete} />
         </div>
       </div>
     </div>
