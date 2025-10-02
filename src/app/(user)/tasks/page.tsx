@@ -1,15 +1,17 @@
 "use client";
 import { useTaskStore } from "@/store/Tasks/taskStore";
 import { useUserStore } from "@/store/userStore";
-import EmployeeTaskTable from "@/components/UI/Tasks/TaskItemUser"; // Assume this component exists
+import EmployeeTaskTable from "@/components/UI/Tasks/Table/TaskItemUser"; // Assume this component exists
 import TaskSummary from "@/components/UI/Tasks/TaskSumUser"; // Assume this component exists
+import useCheckUser from "@/hooks/checkLogin";
 
 export default function MyTasksPage() {
-  // กำหนดให้เริ่มต้นเป็น true เพื่อให้แสดง Skeleton
   const username = useUserStore((state) => state.username);
   const tasks = useTaskStore((state) => state.tasks);
 
-  
+  const { isAuthorized } = useCheckUser({ requiredRole: "employee" });
+  if (!isAuthorized) return null;
+
   // กรองงานเฉพาะของผู้ใช้ปัจจุบัน
   if (!username) return null;
   const myTasks = tasks.filter((t) => t.assignees?.includes(username));
