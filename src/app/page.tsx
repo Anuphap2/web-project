@@ -134,6 +134,8 @@ export default function HomePage() {
               สามารถสร้างงานใหม่ ใส่รายละเอียด กำหนดวันส่ง และมอบหมายงานได้ทันที
             </p>
           </div>
+          {/* Overlay เพื่อให้ข้อความอ่านง่ายขึ้น */}{" "}
+          <div className="absolute inset-0 bg-white/70 backdrop-blur-sm"></div>{" "}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 px-8 md:px-16 container mx-auto">
           <div

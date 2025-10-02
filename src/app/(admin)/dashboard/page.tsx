@@ -4,11 +4,18 @@ import { useTaskStore } from "@/store/Tasks/taskStore";
 import TaskList from "@/components/UI/Tasks/CRUD/TasklistAdmin";
 import TaskSummary from "@/components/UI/Tasks/TaskSummaryAll";
 import ExportButton from "@/components/UI/ExportButton";
+import useCheckUser from "@/hooks/checkLogin";
+
 
 export default function HomePage() {
-  const { username, department } = useUserStore(); // ดึง users มาด้วย
+  const { username, department } = useUserStore(); // ดึง users
   const tasks = useTaskStore((state) => state.tasks);
   const users = useUserListStore((state) => state.users); // ดึง user ทั้งหมด
+
+  // ตรวจสอบสิทธิ์
+  const { isAuthorized, isLoaded } = useCheckUser({ requiredRole: "manager" });
+  if (!isLoaded) return <p>กำลังโหลด...</p>;
+  if (!isAuthorized) return null;
 
   // filter เฉพาะงานในแผนกของ user
   const departmentTasks = tasks.filter((t) => t.department === department);

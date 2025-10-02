@@ -24,7 +24,10 @@ export default function AuthPage() {
   } = useAuth();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#ff8198]/30 via-white to-white p-4">
+    <div
+      className={`flex min-h-screen items-center justify-around p-4 bg-[#FE90A4]`}
+    >
+      {/* Toast Component */}
       {toast && (
         <Toast
           message={toast.text}
@@ -32,56 +35,59 @@ export default function AuthPage() {
           onClose={() => setToast(null)}
         />
       )}
-      <div className="w-full max-w-md rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl p-8 space-y-6 border-t-8 border-black/20">
+
+      <Image
+        src={"/3d.png"}
+        alt="Design illustration"
+        width={530.56}
+        height={530.56}
+        className="object-contain sm:w-[530.56px] sm:h-[530.56px] ml-5 hidden lg:block"
+      />
+
+      <div className="w-full max-w-md  rounded-3xl bg-white shadow-2xl p-8 space-y-6">
         <div className="flex items-center justify-center">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 font-serif tracking-wide">
-              TasksFlow
-            </h1>
-            <p className="text-gray-500 text-center">
-              {" "}
-              {isSignUp ? "Sign Up" : "Login"} ระบบจัดการงานสำหรับคุณ
+            <Image src="/tasksflow.png" alt="Logo" width={180} height={100} />
+            <p className="text-gray-500 text-center font-serif text-2xl font-bold mt-[-10px] ">
+              {isSignUp ? "Sign Up" : "Log in"}
             </p>
           </div>
-          <Image
-            src={"/tasksflow.png"}
-            alt="Logo"
-            width={100}
-            height={100}
-          ></Image>
         </div>
 
-        {/* Username */}
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            <FaUser />
-          </span>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all"
-          />
-        </div>
+        {/* Input Fields */}
+        <div className="space-y-4">
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-50">
+              <FaUser />
+            </span>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className={`input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all`}
+            />
+          </div>
 
-        {/* Password */}
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            <FaLock />
-          </span>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all"
-          />
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 z-50 text-gray-400">
+              <FaLock />
+            </span>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              // ใช้ input/rounded-xl/pl-10 และ focus ring เดิม
+              className={`input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all`}
+            />
+          </div>
         </div>
 
         {/* Level + Department เฉพาะตอน Sign Up */}
         {isSignUp && (
           <div className="space-y-4">
+            {/* เลือกระดับผู้ใช้ */}
             <div>
               <label className="block text-gray-700 mb-1 font-medium">
                 เลือกระดับผู้ใช้
@@ -91,13 +97,15 @@ export default function AuthPage() {
                 onChange={(e) =>
                   setLevel(e.target.value as "manager" | "employee")
                 }
-                className="select select-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all"
+                // ใช้ select/rounded-xl และ focus ring เดิม
+                className={`select select-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all`}
               >
                 <option value="manager">Manager</option>
                 <option value="employee">Employee</option>
               </select>
             </div>
 
+            {/* เลือกแผนก */}
             <div>
               <label className="block text-gray-700 mb-1 font-medium">
                 เลือกแผนก
@@ -105,7 +113,8 @@ export default function AuthPage() {
               <select
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="select select-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all"
+                // ใช้ select/rounded-xl และ focus ring เดิม
+                className={`select select-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all`}
               >
                 {departments.map((dep) => (
                   <option key={dep} value={dep}>
@@ -117,18 +126,20 @@ export default function AuthPage() {
           </div>
         )}
 
-        {/* Button */}
+        {/* Button - Login/Sign Up */}
         <Button
-          label={isSignUp ? "Sign Up" : "Login"}
+          label={isSignUp ? "Sign Up" : "Log in"}
           onClick={handleAuth}
+          // ใช้ className ของปุ่มเดิม
           className="btn bg-black text-white hover:bg-gray-800 border-0 w-full text-lg font-bold rounded-full shadow-lg hover:scale-105 transition-transform duration-200"
         />
 
         {/* Toggle Login / Sign Up */}
-        <p className="text-center text-gray-600 mt-2">
+        <p className="text-center text-gray-600 mt-2 text-sm">
           {isSignUp ? "มีบัญชีแล้ว?" : "ยังไม่มีบัญชี?"}
           <button
-            className="text-[#ff8198] cursor-pointer font-semibold underline ml-1"
+            // ใช้ className ของปุ่มสลับเดิม
+            className={`text-[#ff8198}] cursor-pointer font-semibold underline ml-1`}
             onClick={() => {
               setIsSignUp(!isSignUp);
             }}
