@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @import "tailwindcss";
 
@@ -11,33 +10,14 @@ body,
 }
 
 /* Root variables (theme colors and custom values) */
-=======
-/* globals.css */
-
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap");
-@import "tailwindcss";
-
-@plugin "daisyui" {
-  themes: light --default;
-}
-
-/* ---------------------------------------------------- */
-/* CSS Root Variables for Theme Management */
-/* ---------------------------------------------------- */
->>>>>>> caec83b7136a912f5dcacb8aeff7735abe4fc890
 :root {
-  /* Base Colors (ขาว) */
-  --color-bg-primary: #ffffff; /* White */
-  --color-bg-light: #fff7f9; /* Rose-50 */
-  --color-text-base: #1f2937; /* Gray-800/900 for readability */
-  --color-border-light: #fbcfe8; /* Rose-200/300 */
-
-  /* Accent Colors (ชมพูม่วง) */
-  --color-accent-main: #db2777; /* Fuchsia-600 */
-  --color-accent-dark: #a21255; /* Fuchsia-800 */
-  --color-accent-light: #e879f9; /* Fuchsia-400 for Blob/Shadow */
-
-  /* Landing Specific */
+  --color-bg-primary: #ffffff;
+  --color-bg-light: #fff7f9;
+  --color-text-base: #1f2937;
+  --color-border-light: #fbcfe8;
+  --color-accent-main: #db2777;
+  --color-accent-dark: #a21255;
+  --color-accent-light: #e879f9;
   --color-cta-text: #ffffff;
 }
 
@@ -53,40 +33,30 @@ body {
   scroll-behavior: smooth;
 }
 
-/* ---------------------------------------------------- */
-/* Custom Tailwind Classes (ใช้ @apply เพื่อรวม theme) */
-/* ---------------------------------------------------- */
-
-/* Hero Section Background (สีขาวอมชมพู) */
 .section-hero-bg {
   background-color: var(--color-bg-light);
   border-bottom: 1px solid var(--color-border-light);
 }
 
-/* Main Accent Color for Text */
 .text-accent {
   color: var(--color-accent-main);
 }
 
-/* Secondary Accent Color for Blobs/Graphics */
 .text-accent-light {
   color: var(--color-accent-light);
 }
 
-/* Primary CTA Button Style (ใช้ Fuchsia-600) */
 .btn-primary-theme {
   @apply bg-fuchsia-600 text-white hover:bg-fuchsia-700 border-0 btn-lg rounded-lg shadow-lg font-bold transition duration-300;
 }
 
-/* Secondary CTA Button Style (สำหรับปุ่มเริ่มต้นใช้งานใน Hero) */
 .btn-secondary-theme {
   @apply bg-fuchsia-600 text-white hover:bg-fuchsia-700 border-2 border-fuchsia-400/50 btn-lg rounded-full px-10 sm:px-16 text-xs sm:text-sm font-bold tracking-widest shadow-xl transition duration-300 transform hover:scale-105;
 }
 
-/* Feature Card Styling */
 .card-feature {
   @apply bg-white min-h-[250px] rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 p-8 transform hover:-translate-y-1;
-  border-top: 8px solid var(--color-accent-main); /* ขอบบนสีชมพูม่วง */
+  border-top: 8px solid var(--color-accent-main);
 }
 
 #hero-title {

@@ -28,11 +28,7 @@ export default function RootLayout({
     <html lang="en" data-theme="light" data-scroll-behavior="smooth">
       <body className="antialiased flex min-h-screen flex-col">
         <Navbar />
-<<<<<<< HEAD
         <main className="flex-1">
-=======
-        <main>
->>>>>>> caec83b7136a912f5dcacb8aeff7735abe4fc890
           {children}
           <Footer />
         </main>
@@ -53,4 +49,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
