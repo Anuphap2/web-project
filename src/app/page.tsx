@@ -111,14 +111,15 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 px-8 md:px-16 container mx-auto">
+        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 px-8 md:px-16 container mx-auto overflow-hidden rounded-2xl">
+          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-white/70 backdrop-blur-sm z-10" aria-hidden="true"></div>
           <div
-            className=" order-2 md:order-1 w-full h-96 bg-cover bg-center rounded-2xl"
+            className="order-2 md:order-1 w-full h-96 bg-cover bg-center rounded-2xl relative z-0"
             style={{ backgroundImage: `url(${FeatureImg2.src})` }}
             role="img"
             aria-label="Features-picture-2"
           ></div>
-          <div className="order-1 md:order-2 flex flex-col justify-center items-center text-center gap-4">
+          <div className="order-1 md:order-2 flex flex-col justify-center items-center text-center gap-4 relative z-20">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="56"
@@ -134,8 +135,6 @@ export default function HomePage() {
               สามารถสร้างงานใหม่ ใส่รายละเอียด กำหนดวันส่ง และมอบหมายงานได้ทันที
             </p>
           </div>
-          {/* Overlay เพื่อให้ข้อความอ่านง่ายขึ้น */}{" "}
-          <div className="absolute inset-0 bg-white/70 backdrop-blur-sm"></div>{" "}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 px-8 md:px-16 container mx-auto">
           <div
