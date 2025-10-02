@@ -1,5 +1,9 @@
 ﻿"use client";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 import heroBg from "@/components/img/teamwork.jpg";
 import aboutImg from "@/components/img/kelly-sikkema--1_RZL8BGBM-unsplash.jpg";
 import FeatureImg1 from "@/components/img/mapbox-ZT5v0puBjZI-unsplash.jpg";
@@ -8,10 +12,38 @@ import FeatureImg3 from "@/components/img/vitaly-gariev-pdQIqtbeIsE-unsplash.jpg
 
 export default function HomePage() {
   const router = useRouter();
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!pageRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+    const scroller = pageRef.current.closest("main") as HTMLElement | null;
+    const wrapper =
+      scroller ?? document.querySelector<HTMLElement>("main") ?? document.body;
+
+    if (!wrapper) return;
+
+    ScrollSmoother.get()?.kill();
+
+    const smoother = ScrollSmoother.create({
+      wrapper,
+      content: pageRef.current,
+      smooth: 1.2,
+      normalizeScroll: true,
+      effects: true,
+    });
+
+    return () => {
+      smoother.kill();
+    };
+  }, []);
+
   const aboutContext =
     "เว็บไซต์สำหรับการจัดการงานภายในองค์กร ที่ช่วยให้คุณและทีมสามารถแบ่งงานมอบหมายงาน พร้อมรายละเอียดที่ครบถ้วนในที่เดียว คุณสามารถเลือกดูงานทั้งหมดของทั้งแผนก หรือโฟกัสเฉพาะงานของตัวเอง เพื่อช่วยให้การติดตามและบริหารจัดการงานง่ายขึ้นและยังส่งเสริมการทำงานร่วมกันภายในทีมให้มีประสิทธิภาพมากกว่าเดิม";
   return (
-    <div className="flex flex-col overflow-x-hidden">
+    <div ref={pageRef} className="flex flex-col overflow-x-hidden">
       <div
         id="Hero"
         className="h-screen w-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat relative"
