@@ -1,4 +1,4 @@
-﻿﻿"use client";
+﻿"use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, type MouseEvent } from "react";
 import Image from "next/image";
