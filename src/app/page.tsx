@@ -21,8 +21,8 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!pageRef.current) return;
-
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
 
     // Detect mobile
     const isMobile = window.innerWidth <= 768;
@@ -461,7 +461,6 @@ export default function HomePage() {
 
         {/* FINAL CARD */}
 
-
         <div className="mx-auto max-w-6xl p-4 md:p-8 my-8" data-feature>
           <section className="relative overflow-hidden bg-white">
             <div className="grid items-center gap-8 p-6 md:grid-cols-2 md:p-10">
@@ -485,7 +484,9 @@ export default function HomePage() {
                   src={ThreeDImage}
                   alt="side_3dimage"
                   className="mx-auto w-64 md:w-80"
-                  priority
+                  loading="lazy"
+                  width={ThreeDImage.width} // เพิ่มขนาดจริง
+                  height={ThreeDImage.height} // เพิ่มขนาดจริง
                 />
               </div>
             </div>
