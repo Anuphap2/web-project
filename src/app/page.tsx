@@ -11,7 +11,6 @@ import aboutImg from "@/components/img/kelly-sikkema--1_RZL8BGBM-unsplash.jpg";
 import FeatureImg1 from "@/components/img/mapbox-ZT5v0puBjZI-unsplash.jpg";
 import FeatureImg2 from "@/components/img/marissa-grootes-flRm0z3MEoA-unsplash.jpg";
 import FeatureImg3 from "@/components/img/vitaly-gariev-pdQIqtbeIsE-unsplash.jpg";
-import Footer from "@/components/Layout/Footer";
 import ThreeDImage from "@/components/img/3Dimage.png";
 
 export default function HomePage() {
@@ -223,7 +222,7 @@ export default function HomePage() {
             href="#content"
             className="inline-flex items-center justify-center px-6 py-3 border-2 border-[#E35E25] text-[#E35E25] rounded-full font-semibold backdrop-blur-xl bg-white/20 hover:backdrop-blur-sm hover:bg-white/5 duration-200 shrink-0"
             onClick={handleScrollToContent}
-            style={ {opacity: 1}}
+            style={{ opacity: 1 }}
           >
             ดูเพิ่มเติม
           </a>
@@ -450,8 +449,6 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-
-      <Footer />
     </div>
   );
 }
