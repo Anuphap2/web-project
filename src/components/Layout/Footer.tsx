@@ -6,7 +6,7 @@ export default function Footer() {
 
   return (
     // ปรับพื้นหลังให้เข้มขึ้น และเพิ่มขอบบนสี Indigo เล็กน้อย
-    <footer className="w-full bg-gray-950 text-white">
+    <footer className="w-full bg-gray-950 text-white z-50">
       <div className="mx-auto max-w-7xl py-12 px-6 sm:px-8 lg:px-12">
         {/* Main Flex */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-10">
