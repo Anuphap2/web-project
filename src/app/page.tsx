@@ -11,70 +11,54 @@ import aboutImg from "@/components/img/kelly-sikkema--1_RZL8BGBM-unsplash.jpg";
 import FeatureImg1 from "@/components/img/mapbox-ZT5v0puBjZI-unsplash.jpg";
 import FeatureImg2 from "@/components/img/marissa-grootes-flRm0z3MEoA-unsplash.jpg";
 import FeatureImg3 from "@/components/img/vitaly-gariev-pdQIqtbeIsE-unsplash.jpg";
-import Footer from "@/components/Layout/Footer";
 import ThreeDImage from "@/components/img/3Dimage.png";
 
 export default function HomePage() {
   const router = useRouter();
   const pageRef = useRef<HTMLDivElement>(null);
-  const smootherRef = useRef<ReturnType<typeof ScrollSmoother.create> | null>(
-    null
-  );
+  const smootherRef = useRef<ReturnType<typeof ScrollSmoother.create> | null>(null);
 
   useEffect(() => {
     if (!pageRef.current) return;
 
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-    const scroller = pageRef.current.closest("main") as HTMLElement | null;
-    const wrapper =
-      scroller ?? document.querySelector<HTMLElement>("main") ?? document.body;
-    if (!wrapper) return;
-
-    // Kill previous smoother in dev/HMR
+    // Setup smoother
     ScrollSmoother.get()?.kill();
-
     const smoother = ScrollSmoother.create({
-      wrapper,
-      content: pageRef.current,
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
       smooth: 1.2,
       normalizeScroll: true,
       effects: true,
     });
     smootherRef.current = smoother;
 
+    const q = gsap.utils.selector(pageRef);
+
     const ctx = gsap.context(() => {
       // --- HERO TITLE SPLIT ---
-      const heroTitle = document.querySelector(
-        "#Hero-title"
-      ) as HTMLElement | null;
+      const heroTitle = q("#Hero-title")[0];
       if (heroTitle && !heroTitle.querySelector("span")) {
-        const text = heroTitle.textContent || "";
-        heroTitle.innerHTML = text
+        heroTitle.innerHTML = heroTitle.textContent!
           .split("")
-          .map((c) => `<span class="inline-block">${c}</span>`)
+          .map(c => `<span class="inline-block">${c}</span>`)
           .join("");
       }
 
-      // --- HERO ANIMATION TIMELINE ---
+      // --- HERO TIMELINE ---
       const heroTL = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#Hero",
-          start: "top center",
-          once: true,
-        },
+        scrollTrigger: { trigger: "#Hero", start: "top center", once: true },
       });
-
       heroTL
-        .from("#Hero-title span", {
+        .from(q("#Hero-title span"), {
           y: 50,
           opacity: 0,
           stagger: 0.05,
           duration: 0.6,
           ease: "power3.out",
         })
-        // buttons fade in only AFTER title stagger completes
-        .from("#hero-btn > *", {
+        .from(q("#hero-btn > *"), {
           opacity: 0,
           duration: 0.8,
           ease: "power1.out",
@@ -82,7 +66,7 @@ export default function HomePage() {
         });
 
       // --- HERO BG PARALLAX ---
-      gsap.to("#Hero", {
+      gsap.to(q("#Hero"), {
         backgroundPositionY: "20%",
         ease: "none",
         scrollTrigger: {
@@ -94,7 +78,7 @@ export default function HomePage() {
       });
 
       // --- SCROLL HINT BOUNCE ---
-      gsap.to("#scroll-suggest svg", {
+      gsap.to(q("#scroll-suggest svg"), {
         y: 8,
         repeat: -1,
         yoyo: true,
@@ -102,31 +86,21 @@ export default function HomePage() {
         duration: 0.9,
       });
 
-      // --- ABOUT SECTION ---
-      gsap.from("#about-card", {
+      // --- ABOUT CARD ---
+      gsap.from(q("#about-card"), {
         opacity: 0,
         y: 32,
         duration: 0.7,
         ease: "power2.out",
-        scrollTrigger: {
-          trigger: "#about-card",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
+        scrollTrigger: { trigger: "#about-card", start: "top 80%", toggleActions: "play none none reverse" },
       });
-
-      gsap.to("#about-card", {
+      gsap.to(q("#about-card"), {
         backgroundPositionY: "60%",
         ease: "none",
-        scrollTrigger: {
-          trigger: "#about-card",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+        scrollTrigger: { trigger: "#about-card", start: "top bottom", end: "bottom top", scrub: true },
       });
 
-      // --- FEATURES REVEAL ---
+      // --- FEATURES REVEAL + PARALLAX BATCH ---
       gsap.utils.toArray<HTMLElement>("[data-feature]").forEach((el, i) => {
         const fromX = i % 2 === 0 ? -40 : 40;
         gsap.from(el, {
@@ -134,36 +108,40 @@ export default function HomePage() {
           x: fromX,
           duration: 0.7,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 82%",
-            toggleActions: "play none none reverse",
-          },
+          scrollTrigger: { trigger: el, start: "top 82%", toggleActions: "play none none reverse" },
         });
+
+        // Lazy load background images
+        const bgEl = el.querySelector<HTMLElement>("[data-parallax-bg]");
+        if (bgEl) {
+          const bgUrl = bgEl.style.backgroundImage;
+          bgEl.style.backgroundImage = "none"; // start blank
+          ScrollTrigger.create({
+            trigger: el,
+            start: "top 90%",
+            onEnter: () => {
+              bgEl.style.backgroundImage = bgUrl;
+            },
+          });
+
+          gsap.to(bgEl, {
+            backgroundPositionY: "40%",
+            ease: "none",
+            scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+          });
+        }
       });
 
-      // --- FEATURE BG PARALLAX ---
-      gsap.utils.toArray<HTMLElement>("[data-parallax-bg]").forEach((el) => {
-        gsap.to(el, {
-          backgroundPositionY: "40%",
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
+      // --- FLOATING 3D IMAGE SCROLL ---
+      const threeD = q("#threeD-image")[0];
+      if (threeD) {
+        gsap.to(threeD, {
+          y: 10,
+          ease: "sine.inOut",
+          scrollTrigger: { trigger: threeD, start: "top bottom", end: "bottom top", scrub: true },
+          willChange: "transform",
         });
-      });
-
-      // --- FLOATING 3D IMAGE ---
-      gsap.to("#threeD-image", {
-        y: 10,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        duration: 1.6,
-      });
+      }
     }, pageRef);
 
     return () => {
@@ -185,10 +163,10 @@ export default function HomePage() {
   };
 
   const aboutContext =
-    "เว็บไซต์สำหรับการจัดการงานภายในองค์กร ที่ช่วยให้คุณและทีมสามารถแบ่งงานมอบหมายงาน พร้อมรายละเอียดที่ครบถ้วนในที่เดียว คุณสามารถเลือกดูงานทั้งหมดของทั้งแผนก หรือโฟกัสเฉพาะงานของตัวเอง เพื่อช่วยให้การติดตามและบริหารจัดการงานง่ายขึ้นและยังส่งเสริมการทำงานร่วมกันภายในทีมให้มีประสิทธิภาพมากกว่าเดิม";
+    "เว็บไซต์สำหรับการจัดการงานภายในองค์กร ที่ช่วยให้คุณและทีมสามารถแบ่งงานมอบหมายงาน พร้อมรายละเอียดที่ครบถ้วนในที่เดียว...";
 
   return (
-    <div ref={pageRef} className="flex flex-col overflow-x-hidden">
+    <div id="pageApp" ref={pageRef} className="flex flex-col overflow-x-hidden">
       {/* HERO */}
       <div
         id="Hero"
@@ -450,7 +428,6 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-      <Footer />
     </div>
   );
 }
