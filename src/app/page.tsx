@@ -11,6 +11,7 @@ import aboutImg from "@/components/img/kelly-sikkema--1_RZL8BGBM-unsplash.jpg";
 import FeatureImg1 from "@/components/img/mapbox-ZT5v0puBjZI-unsplash.jpg";
 import FeatureImg2 from "@/components/img/marissa-grootes-flRm0z3MEoA-unsplash.jpg";
 import FeatureImg3 from "@/components/img/vitaly-gariev-pdQIqtbeIsE-unsplash.jpg";
+import Footer from "@/components/Layout/Footer";
 import ThreeDImage from "@/components/img/3Dimage.png";
 
 export default function HomePage() {
@@ -449,6 +450,7 @@ export default function HomePage() {
           </div>
         </section>
       </div>
+      <Footer />
     </div>
   );
 }

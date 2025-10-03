@@ -28,8 +28,9 @@ export default function RootLayout({
     <html lang="en" data-theme="light" data-scroll-behavior="smooth">
       <body className="antialiased flex min-h-screen flex-col">
         <Navbar />
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1">
           {children}
+
           <Footer />
         </main>
 
@@ -49,6 +50,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
-
