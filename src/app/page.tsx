@@ -223,7 +223,7 @@ export default function HomePage() {
             href="#content"
             className="inline-flex items-center justify-center px-6 py-3 border-2 border-[#E35E25] text-[#E35E25] rounded-full font-semibold backdrop-blur-xl bg-white/20 hover:backdrop-blur-sm hover:bg-white/5 duration-200 shrink-0"
             onClick={handleScrollToContent}
-            style={ {opacity: 1}}
+            style={{ opacity: 1 }}
           >
             ดูเพิ่มเติม
           </a>
@@ -450,8 +450,6 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-
-      <Footer />
     </div>
   );
 }
