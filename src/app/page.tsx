@@ -5,6 +5,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import Footer from "@/components/Layout/Footer";
 
 import aboutImg from "@/components/img/kelly-sikkema--1_RZL8BGBM-unsplash.jpg";
 import FeatureImg1 from "@/components/img/mapbox-ZT5v0puBjZI-unsplash.jpg";
@@ -22,7 +23,6 @@ export default function HomePage() {
   useEffect(() => {
     if (!pageRef.current) return;
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-
 
     // Detect mobile
     const isMobile = window.innerWidth <= 768;
@@ -492,6 +492,7 @@ export default function HomePage() {
             </div>
           </section>
         </div>
+        <Footer />
       </div>
     </div>
   );
