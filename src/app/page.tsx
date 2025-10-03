@@ -16,37 +16,43 @@ import ThreeDImage from "@/components/img/3Dimage.png";
 export default function HomePage() {
   const router = useRouter();
   const pageRef = useRef<HTMLDivElement>(null);
-  const smootherRef = useRef<ReturnType<typeof ScrollSmoother.create> | null>(null);
+  const smootherRef = useRef<ReturnType<typeof ScrollSmoother.create> | null>(
+    null
+  );
 
   useEffect(() => {
     if (!pageRef.current) return;
 
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-    // Setup smoother
+    // Detect mobile
+    const isMobile = window.innerWidth <= 768;
+
+    // Kill previous smoother (HMR)
     ScrollSmoother.get()?.kill();
+
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.2,
+      smooth: isMobile ? 0.8 : 1.2, // mobile smooth faster
       normalizeScroll: true,
-      effects: true,
+      effects: !isMobile, // ปิด effects บนมือถือเพื่อลด lag
     });
     smootherRef.current = smoother;
 
     const q = gsap.utils.selector(pageRef);
 
     const ctx = gsap.context(() => {
-      // --- HERO TITLE SPLIT ---
+      // HERO TITLE SPLIT
       const heroTitle = q("#Hero-title")[0];
       if (heroTitle && !heroTitle.querySelector("span")) {
-        heroTitle.innerHTML = heroTitle.textContent!
-          .split("")
-          .map(c => `<span class="inline-block">${c}</span>`)
+        heroTitle.innerHTML = heroTitle
+          .textContent!.split("")
+          .map((c) => `<span class="inline-block">${c}</span>`)
           .join("");
       }
 
-      // --- HERO TIMELINE ---
+      // HERO TIMELINE
       const heroTL = gsap.timeline({
         scrollTrigger: { trigger: "#Hero", start: "top center", once: true },
       });
@@ -54,20 +60,20 @@ export default function HomePage() {
         .from(q("#Hero-title span"), {
           y: 50,
           opacity: 0,
-          stagger: 0.05,
-          duration: 0.6,
+          stagger: isMobile ? 0.02 : 0.05, // mobile สั้นลง
+          duration: 0.5,
           ease: "power3.out",
         })
         .from(q("#hero-btn > *"), {
           opacity: 0,
-          duration: 0.8,
+          duration: 0.6,
           ease: "power1.out",
-          stagger: 0.2,
+          stagger: isMobile ? 0.1 : 0.2,
         });
 
-      // --- HERO BG PARALLAX ---
+      // HERO BG PARALLAX (เบาลงสำหรับมือถือ)
       gsap.to(q("#Hero"), {
-        backgroundPositionY: "20%",
+        backgroundPositionY: isMobile ? "10%" : "20%",
         ease: "none",
         scrollTrigger: {
           trigger: "#Hero",
@@ -77,45 +83,59 @@ export default function HomePage() {
         },
       });
 
-      // --- SCROLL HINT BOUNCE ---
+      // SCROLL HINT BOUNCE
       gsap.to(q("#scroll-suggest svg"), {
-        y: 8,
+        y: 6,
         repeat: -1,
         yoyo: true,
         ease: "sine.inOut",
-        duration: 0.9,
+        duration: 0.8,
       });
 
-      // --- ABOUT CARD ---
+      // ABOUT CARD
       gsap.from(q("#about-card"), {
         opacity: 0,
-        y: 32,
-        duration: 0.7,
+        y: 20,
+        duration: 0.6,
         ease: "power2.out",
-        scrollTrigger: { trigger: "#about-card", start: "top 80%", toggleActions: "play none none reverse" },
+        scrollTrigger: {
+          trigger: "#about-card",
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
       });
-      gsap.to(q("#about-card"), {
-        backgroundPositionY: "60%",
-        ease: "none",
-        scrollTrigger: { trigger: "#about-card", start: "top bottom", end: "bottom top", scrub: true },
-      });
+      if (!isMobile) {
+        gsap.to(q("#about-card"), {
+          backgroundPositionY: "60%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#about-card",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
 
-      // --- FEATURES REVEAL + PARALLAX BATCH ---
+      // FEATURES REVEAL + PARALLAX
       gsap.utils.toArray<HTMLElement>("[data-feature]").forEach((el, i) => {
-        const fromX = i % 2 === 0 ? -40 : 40;
+        const fromX = i % 2 === 0 ? -30 : 30;
         gsap.from(el, {
           opacity: 0,
-          x: fromX,
-          duration: 0.7,
+          x: isMobile ? 0 : fromX,
+          duration: 0.6,
           ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 82%", toggleActions: "play none none reverse" },
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
         });
 
-        // Lazy load background images
         const bgEl = el.querySelector<HTMLElement>("[data-parallax-bg]");
-        if (bgEl) {
+        if (bgEl && !isMobile) {
           const bgUrl = bgEl.style.backgroundImage;
-          bgEl.style.backgroundImage = "none"; // start blank
+          bgEl.style.backgroundImage = "none";
           ScrollTrigger.create({
             trigger: el,
             start: "top 90%",
@@ -127,18 +147,28 @@ export default function HomePage() {
           gsap.to(bgEl, {
             backgroundPositionY: "40%",
             ease: "none",
-            scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
           });
         }
       });
 
-      // --- FLOATING 3D IMAGE SCROLL ---
+      // FLOATING 3D IMAGE
       const threeD = q("#threeD-image")[0];
-      if (threeD) {
+      if (threeD && !isMobile) {
         gsap.to(threeD, {
           y: 10,
           ease: "sine.inOut",
-          scrollTrigger: { trigger: threeD, start: "top bottom", end: "bottom top", scrub: true },
+          scrollTrigger: {
+            trigger: threeD,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
           willChange: "transform",
         });
       }
@@ -151,6 +181,7 @@ export default function HomePage() {
     };
   }, []);
 
+  // Scroll-to-content function เหมือนเดิม
   const handleScrollToContent = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     const target = document.querySelector<HTMLElement>("#content");
