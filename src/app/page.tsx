@@ -6,7 +6,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-import heroBg from "@/components/img/teamwork.jpg";
 import aboutImg from "@/components/img/kelly-sikkema--1_RZL8BGBM-unsplash.jpg";
 import FeatureImg1 from "@/components/img/mapbox-ZT5v0puBjZI-unsplash.jpg";
 import FeatureImg2 from "@/components/img/marissa-grootes-flRm0z3MEoA-unsplash.jpg";
@@ -54,21 +53,23 @@ export default function HomePage() {
 
       // HERO TIMELINE
       const heroTL = gsap.timeline({
-        scrollTrigger: { trigger: "#Hero", start: "top center", once: true },
+        scrollTrigger: { trigger: "#Hero", start: "top 90%", once: true },
       });
       heroTL
-        .from(q("#Hero-title span"), {
+        .from("#Hero-title span", {
           y: 50,
           opacity: 0,
-          stagger: isMobile ? 0.02 : 0.05, // mobile สั้นลง
-          duration: 0.5,
+          stagger: 0.05,
+          duration: 0.6,
           ease: "power3.out",
         })
         .from(q("#hero-btn > *"), {
           opacity: 0,
+          y: 20,
+          stagger: 0.2,
           duration: 0.6,
           ease: "power1.out",
-          stagger: isMobile ? 0.1 : 0.2,
+          immediateRender: false,
         });
 
       // HERO BG PARALLAX (เบาลงสำหรับมือถือ)
@@ -206,48 +207,51 @@ export default function HomePage() {
         {/* HERO */}
         <div
           id="Hero"
-          className="h-screen w-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat relative"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0), #FFF), url(${heroBg.src})`,
-          }}
+          className="h-screen w-screen flex flex-col items-center justify-center relative bg-[#FE90A4] overflow-hidden"
+          style={{ backgroundColor: "#FE90A4" }}
         >
+          {/* Overlay โปร่งใสทำให้พื้นนุ่ม */}
+          <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
+
           <Image
             src="/tasksflow.png"
             alt="TaskFlow Logo"
             width={128}
             height={128}
-            className="mb-4 absolute top-4 left-0"
+            className="mb-4 relative z-10"
           />
+
           <h1
             id="Hero-title"
-            className="font-bold text-7xl text-[#E35E25] text-center overflow-hidden"
+            className="font-bold text-6xl text-white text-center relative z-10 drop-shadow-lg"
           >
             TASKSFLOW
           </h1>
 
-          <div id="hero-btn" className="mt-8 flex gap-4">
+          <div id="hero-btn" className="mt-8 flex gap-4 relative z-10">
             <button
-              className="inline-flex items-center justify-center px-6 py-3 bg-[#E35E25]/90 backdrop-blur-xl text-white rounded-full font-semibold text-lg hover:bg-[#c94e1f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c94e1f] transition-colors duration-200 shrink-0"
+              className="cursor-pointer inline-flex items-center justify-center px-6 py-3 bg-white/90 backdrop-blur-md text-black rounded-full font-semibold text-lg 
+      hover:bg-white transition duration-200 shrink-0 shadow-lg"
               onClick={() => router.push("/login")}
             >
-              Login
+              เข้าสู่ระบบ
             </button>
 
             <a
               href="#content"
-              className="inline-flex items-center justify-center px-6 py-3 border-2 border-[#E35E25] text-[#E35E25] rounded-full font-semibold backdrop-blur-xl bg-white/20 hover:backdrop-blur-sm hover:bg-white/5 duration-200 shrink-0"
+              className="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white rounded-full font-semibold backdrop-blur-md bg-white/20 hover:bg-white/30 transition duration-200 shrink-0 shadow-lg"
               onClick={handleScrollToContent}
-              style={{ opacity: 1 }}
             >
               ดูเพิ่มเติม
             </a>
           </div>
 
+          {/* Scroll hint */}
           <div
             id="scroll-suggest"
             className="absolute bottom-12 left-0 w-full flex justify-center flex-col z-10 pointer-events-none"
           >
-            <p className="text-lg text-gray-600 flex flex-col items-center mx-auto">
+            <p className="text-lg text-white flex flex-col items-center mx-auto">
               เลื่อนลง
             </p>
             <svg
@@ -255,14 +259,14 @@ export default function HomePage() {
               width="24"
               height="24"
               fill="currentColor"
-              className="bi bi-arrow-bar-down mx-auto"
+              className="bi bi-arrow-bar-down mx-auto text-white animate-bounce"
               viewBox="0 0 16 16"
             >
               <path
                 fillRule="evenodd"
                 d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5M8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 
-      .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 
-      12.293V6.5A.5.5 0 0 1 8 6"
+        .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 
+        12.293V6.5A.5.5 0 0 1 8 6"
               />
             </svg>
           </div>
@@ -271,20 +275,39 @@ export default function HomePage() {
         {/* ABOUT */}
         <section
           id="content"
-          className="px-8 md:px-16 py-16 md:py-20 container mx-auto mt-16"
+          // เพิ่ม padding ด้านบนให้มากขึ้นเล็กน้อยเพื่อให้ดูมีพื้นที่หายใจ
+          className="px-8 md:px-16 py-20 md:py-28 container mx-auto mt-8"
         >
           <div
             id="about-card"
-            className="w-full h-96 rounded-2xl relative overflow-hidden flex items-center justify-center flex-col text-center bg-cover bg-center"
+            // ปรับ rounded-2xl เป็น rounded-3xl ให้ดูนุ่มนวลขึ้น
+            className="w-full h-96 rounded-3xl relative overflow-hidden flex items-center justify-center flex-col text-center bg-cover bg-center shadow-2xl"
             style={{ backgroundImage: `url(${aboutImg.src})` }}
             role="img"
             aria-label="About tasksflow picture"
           >
+            {/* Dark Overlay เพิ่มความชัดเจนของข้อความ */}
+            <div className="absolute inset-0 bg-black/40"></div>
+
             <div className="relative z-10 max-w-3xl px-6">
-              <h1 className="text-3xl md:text-4xl font-extrabold text-[#ff7b42]">
+              <h1
+                // เปลี่ยนเป็นสีชมพูตามธีมหลัก และปรับ drop-shadow ให้คมชัด
+                className="text-4xl md:text-5xl font-extrabold text-[#FE90A4] drop-shadow-md"
+                style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.8)" }}
+              >
                 Tasksflow คืออะไร?
               </h1>
-              <p className="mt-6 text-base md:text-lg leading-relaxed text-gray-800 bg-white/50 px-6 py-8 rounded-lg shadow-lg backdrop-blur-sm">
+              <p
+                className="mt-6 text-lg md:text-xl leading-relaxed text-gray-900 
+                       px-10 py-8 rounded-xl 
+                       bg-white/80 backdrop-blur-md 
+                       shadow-xl border-2 border-white/50"
+                // เพิ่ม Inner Shadow เล็กน้อย
+                style={{
+                  boxShadow:
+                    "0 8px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.7)",
+                }}
+              >
                 {aboutContext}
               </p>
             </div>
@@ -437,6 +460,8 @@ export default function HomePage() {
         </section>
 
         {/* FINAL CARD */}
+
+
         <div className="mx-auto max-w-6xl p-4 md:p-8 my-8" data-feature>
           <section className="relative overflow-hidden bg-white">
             <div className="grid items-center gap-8 p-6 md:grid-cols-2 md:p-10">
