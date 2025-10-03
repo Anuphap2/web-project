@@ -28,10 +28,13 @@ export default function RootLayout({
     <html lang="en" data-theme="light" data-scroll-behavior="smooth">
       <body className="antialiased flex min-h-screen flex-col">
         <Navbar />
-        <main className="flex-1">
-          {children}
 
-          <Footer />
+        <main id="smooth-wrapper">
+          <div id="smooth-content">
+            {children}
+
+            <Footer />
+          </div>
         </main>
 
         <ToastContainer
