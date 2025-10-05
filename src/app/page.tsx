@@ -47,7 +47,6 @@ export default function HomePage() {
     // Detect mobile
     const isMobile = window.innerWidth <= 768;
 
-
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
@@ -295,34 +294,38 @@ export default function HomePage() {
         {/* ABOUT */}
         <section
           id="content"
-          // เพิ่ม padding ด้านบนให้มากขึ้นเล็กน้อยเพื่อให้ดูมีพื้นที่หายใจ
-          className="px-8 md:px-16 py-20 md:py-28 container mx-auto mt-8"
+          className="container mx-auto px-4 sm:px-6 md:px-16 py-16 md:py-24 mt-8"
         >
           <div
             id="about-card"
-            // ปรับ rounded-2xl เป็น rounded-3xl ให้ดูนุ่มนวลขึ้น
-            className="w-full h-96 rounded-3xl relative overflow-hidden flex items-center justify-center flex-col text-center bg-cover bg-center shadow-2xl"
+            className="
+      relative w-full overflow-hidden rounded-3xl bg-cover bg-center shadow-2xl
+      min-h-[22rem] md:min-h-[24rem]    /* <- no fixed height */
+      flex items-center justify-center text-center
+      px-4 sm:px-6 py-10 md:py-12       /* breathing room on small screens */
+    "
             style={{ backgroundImage: `url(${aboutImg.src})` }}
             role="img"
             aria-label="About tasksflow picture"
           >
-            {/* Dark Overlay เพิ่มความชัดเจนของข้อความ */}
-            <div className="absolute inset-0 bg-black/40"></div>
+            <div className="absolute inset-0 bg-black/35" />
 
-            <div className="relative z-10 max-w-3xl px-6">
+            <div className="relative z-10 max-w-xl md:max-w-3xl mx-auto">
               <h1
-                // เปลี่ยนเป็นสีชมพูตามธีมหลัก และปรับ drop-shadow ให้คมชัด
-                className="text-4xl md:text-5xl font-extrabold text-[#FE90A4] drop-shadow-md"
-                style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.8)" }}
+                className="text-3xl md:text-5xl font-extrabold text-[#FE90A4] drop-shadow-md"
+                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
               >
                 Tasksflow คืออะไร?
               </h1>
+
               <p
-                className="mt-6 text-lg md:text-xl leading-relaxed text-gray-900 
-                       px-10 py-8 rounded-xl 
-                       bg-white/80 backdrop-blur-md 
-                       shadow-xl border-2 border-white/50"
-                // เพิ่ม Inner Shadow เล็กน้อย
+                className="
+          mt-5 md:mt-6 text-base md:text-xl leading-7 md:leading-8
+          text-gray-900 bg-white/80 backdrop-blur-md
+          px-5 sm:px-7 md:px-10 py-6 md:py-8
+          rounded-xl shadow-xl
+          break-words text-balance
+        "
                 style={{
                   boxShadow:
                     "0 8px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.7)",
