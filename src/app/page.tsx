@@ -22,13 +22,31 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!pageRef.current) return;
+
+    const enableSmoothLock = () => {
+      if (typeof document === "undefined") return;
+      document.body.classList.add("smooth-scroll-active");
+    };
+
+    const disableSmoothLock = () => {
+      if (typeof document === "undefined") return;
+      document.body.classList.remove("smooth-scroll-active");
+    };
+
+    const killSmoother = () => {
+      ScrollSmoother.get()?.kill();
+      smootherRef.current = null;
+      disableSmoothLock();
+    };
+
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+    // Reset previous smoother state (HMR / navigation)
+    killSmoother();
 
     // Detect mobile
     const isMobile = window.innerWidth <= 768;
 
-    // Kill previous smoother (HMR)
-    ScrollSmoother.get()?.kill();
 
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
@@ -38,6 +56,9 @@ export default function HomePage() {
       effects: !isMobile, // ปิด effects บนมือถือเพื่อลด lag
     });
     smootherRef.current = smoother;
+    if (!isMobile) {
+      enableSmoothLock();
+    }
 
     const q = gsap.utils.selector(pageRef);
 
@@ -177,8 +198,7 @@ export default function HomePage() {
 
     return () => {
       ctx.revert();
-      smoother.kill();
-      smootherRef.current = null;
+      killSmoother();
     };
   }, []);
 

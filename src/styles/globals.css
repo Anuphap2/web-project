@@ -24,6 +24,10 @@
   --color-cta-text: #ffffff;
 }
 
+html, body {
+  min-height: 100%;
+}
+
 html {
   font-family: "Noto Sans Thai", sans-serif;
   scroll-behavior: smooth;
@@ -69,4 +73,22 @@ body {
 .card-feature {
   @apply bg-white min-h-[250px] rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 p-8 transform hover:-translate-y-1;
   border-top: 8px solid var(--color-accent-main); /* ขอบบนสีชมพูม่วง */
+}
+
+#Hero, #hero-bg, #threeD-image {
+  will-change: transform, opacity;
+}
+
+body.smooth-scroll-active {
+  overflow: hidden;
+}
+
+body.smooth-scroll-active #smooth-wrapper {
+  height: 100%;
+  overflow: hidden;
+}
+
+body.smooth-scroll-active #smooth-content {
+  min-height: 100%;
+  will-change: transform, opacity;
 }
