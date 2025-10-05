@@ -9,9 +9,10 @@ import {
   FaSave,
   FaBan,
   FaUser,
-  FaCheckCircle,
 } from "react-icons/fa";
 import { BiTask } from "react-icons/bi";
+import { CgSearchLoading } from "react-icons/cg";
+
 
 type TaskListProps = { tasks: Task[] };
 
@@ -89,7 +90,7 @@ export default function Tasks({ tasks }: TaskListProps) {
           </select>
         </div>
         <div className="flex flex-col items-center justify-center p-10 bg-base-100 rounded-xl shadow-lg border border-base-200 text-center">
-          <FaCheckCircle className="text-5xl text-success mb-4" />
+          <CgSearchLoading className="text-5xl text-success mb-4" />
           <p className="text-xl font-semibold text-gray-700 mb-1">
             ไม่มีงานใหม่ให้แสดง
           </p>
