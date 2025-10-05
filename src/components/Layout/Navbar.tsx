@@ -18,12 +18,17 @@ export default function Navbar() {
     router.push("/login");
   };
 
+  const handleLinkClick = () => {
+    setIsMenuOpen(false); //
+  };
+
   const renderNavLinks = () =>
     level === "manager" ? (
       <>
         <li>
           <Link
             href="/dashboard"
+            onClick={handleLinkClick}
             className="hover:text-[#ff8198] transition-colors"
           >
             งานทั้งหมดของแผนก
@@ -32,6 +37,7 @@ export default function Navbar() {
         <li>
           <Link
             href="/addTasks"
+            onClick={handleLinkClick}
             className="hover:text-[#ff8198] transition-colors"
           >
             เพิ่มงานใหม่
@@ -40,6 +46,7 @@ export default function Navbar() {
         <li>
           <Link
             href="/listDepart"
+            onClick={handleLinkClick}
             className="hover:text-[#ff8198] transition-colors"
           >
             รายชื่อพนักงาน
@@ -49,13 +56,14 @@ export default function Navbar() {
     ) : (
       <>
         <li>
-          <Link href="/home" className="hover:text-[#ff8198] transition-colors">
+          <Link href="/home" onClick={handleLinkClick} className="hover:text-[#ff8198] transition-colors">
             หน้าหลัก
           </Link>
         </li>
         <li>
           <Link
             href="/tasks"
+            onClick={handleLinkClick}
             className="hover:text-[#ff8198] transition-colors"
           >
             งานของฉัน
