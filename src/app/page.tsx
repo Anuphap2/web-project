@@ -243,7 +243,7 @@ export default function HomePage() {
 
           <h1
             id="Hero-title"
-            className="font-bold text-6xl text-white text-center relative z-10 drop-shadow-lg"
+            className="font-bold text-5xl md:text-7xl text-white text-center relative z-10 drop-shadow-lg"
           >
             TASKSFLOW
           </h1>
