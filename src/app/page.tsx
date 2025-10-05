@@ -227,7 +227,7 @@ export default function HomePage() {
         {/* HERO */}
         <div
           id="Hero"
-          className="h-screen w-screen flex flex-col items-center justify-center relative bg-[#FE90A4] overflow-hidden"
+          className="h-[100dvh] w-screen flex flex-col items-center justify-center relative bg-[#FE90A4] overflow-hidden"
           style={{ backgroundColor: "#FE90A4" }}
         >
           {/* Overlay โปร่งใสทำให้พื้นนุ่ม */}
