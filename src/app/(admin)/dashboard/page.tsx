@@ -30,20 +30,22 @@ export default function HomePage() {
             </h1>
             <p className="text-lg text-gray-500 mb-4">ระบบจัดการงานสำหรับคุณ</p>
 
-            <div className="flex items-center gap-4 mt-4">
-              {/* Level Badge */}
-              <div className="badge badge-lg badge-primary flex items-center justify-start gap-2 p-3 transition-all hover:scale-105">
-                <span className="font-medium">ตำแหน่ง:</span>
-                <span className="font-bold uppercase">{level}</span>
+            <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
+              <div className="flex items-center gap-4">
+                {/* Level Badge */}
+                <div className="badge badge-lg badge-primary flex items-center gap-2 p-3">
+                  <span className="font-medium">ตำแหน่ง:</span>
+                  <span className="font-bold uppercase">{level}</span>
+                </div>
+
+                {/* Department Badge */}
+                <div className="badge badge-lg badge-accent flex items-center gap-2 p-3">
+                  <span className="font-medium">แผนก:</span>
+                  <span className="font-bold">{department || "N/A"}</span>
+                </div>
               </div>
 
-              {/* Department Badge */}
-              <div className="badge badge-lg badge-accent flex items-center justify-start gap-2 p-3 transition-all hover:scale-105">
-                <span className="font-medium">แผนก:</span>
-                <span className="font-bold">{department || "N/A"}</span>
-              </div>
-
-              <div className="ml-auto">
+              <div className="shrink-0">
                 <ExportButton />
               </div>
             </div>
