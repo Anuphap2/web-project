@@ -4,6 +4,7 @@ import Button from "@/components/UI/Button";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import Toast from "@/components/Layout/Toast";
+import { cssTransition } from "react-toastify";
 
 export default function AuthPage() {
   const {
@@ -55,7 +56,7 @@ export default function AuthPage() {
         </div>
 
         {/* Input Fields */}
-        <div className="space-y-4">
+        <div className="space-y-6 my-12">
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-50">
               <FaUser />
@@ -65,7 +66,7 @@ export default function AuthPage() {
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className={`input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all`}
+              className={`input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all h-14 md:h-12`}
             />
           </div>
 
@@ -79,7 +80,7 @@ export default function AuthPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               // ใช้ input/rounded-xl/pl-10 และ focus ring เดิม
-              className={`input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all`}
+              className={`input input-bordered w-full pl-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff8198] transition-all h-14 md:h-12`}
             />
           </div>
         </div>
@@ -130,8 +131,13 @@ export default function AuthPage() {
         <Button
           label={isSignUp ? "Sign Up" : "Log in"}
           onClick={handleAuth}
-          // ใช้ className ของปุ่มเดิม
-          className="btn bg-black text-white hover:bg-gray-800 border-0 w-full text-lg font-bold rounded-full shadow-lg hover:scale-105 transition-transform duration-200"
+          className="
+            btn w-11/12 text-lg font-bold rounded-full shadow-lg mx-auto block
+            h-16 md:h-12 border-0 text-white
+            bg-black transition-all duration-200 ease-[cubic-bezier(0.56,0.97,0.62,0.92)]
+            hover:bg-gray-800
+            hover:scale-105
+          "
         />
 
         {/* Toggle Login / Sign Up */}
@@ -139,7 +145,7 @@ export default function AuthPage() {
           {isSignUp ? "มีบัญชีแล้ว?" : "ยังไม่มีบัญชี?"}
           <button
             // ใช้ className ของปุ่มสลับเดิม
-            className={`text-[#ff8198}] cursor-pointer font-semibold underline ml-1`}
+            className={`text-blue-500 cursor-pointer font-semibold underline ml-1`}
             onClick={() => {
               setIsSignUp(!isSignUp);
             }}
