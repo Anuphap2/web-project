@@ -38,7 +38,6 @@ export default function Tasks({ tasks }: TaskListProps) {
     [key: string]: boolean;
   }>({});
 
-  
   const [search, setSearch] = useState("");
   const [sortByDate, setSortByDate] = useState<"asc" | "desc" | null>(null);
 
@@ -67,15 +66,38 @@ export default function Tasks({ tasks }: TaskListProps) {
 
   if (visibleTasks.length === 0)
     return (
-      <div className="flex flex-col items-center justify-center p-10 bg-base-100 rounded-xl shadow-lg border border-base-200 text-center">
-        <FaCheckCircle className="text-5xl text-success mb-4" />
-        <p className="text-xl font-semibold text-gray-700 mb-1">
-          ไม่มีงานใหม่ให้แสดง
-        </p>
-        <p className="text-gray-500">
-          คุณสามารถสร้างงานใหม่ หรือรอการมอบหมายงานได้
-        </p>
-      </div>
+      <>
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
+          <input
+            type="text"
+            placeholder="ค้นหาหัวข้องาน..."
+            value={search}
+            autoFocus
+            onChange={(e) => setSearch(e.target.value)}
+            className="input input- input-bordered flex-1"
+          />
+          <select
+            className="select select-bordered w-40"
+            value={sortByDate ?? ""}
+            onChange={(e) =>
+              setSortByDate(e.target.value as "asc" | "desc" | null)
+            }
+          >
+            <option value="">เรียงตามวันที่สิ้นสุด</option>
+            <option value="asc">น้อย → มาก</option>
+            <option value="desc">มาก → น้อย</option>
+          </select>
+        </div>
+        <div className="flex flex-col items-center justify-center p-10 bg-base-100 rounded-xl shadow-lg border border-base-200 text-center">
+          <FaCheckCircle className="text-5xl text-success mb-4" />
+          <p className="text-xl font-semibold text-gray-700 mb-1">
+            ไม่มีงานใหม่ให้แสดง
+          </p>
+          <p className="text-gray-500">
+            คุณสามารถสร้างงานใหม่ หรือรอการมอบหมายงานได้
+          </p>
+        </div>
+      </>
     );
 
   const getStatusColor = (status: Task["status"]) => {
@@ -98,6 +120,7 @@ export default function Tasks({ tasks }: TaskListProps) {
           type="text"
           placeholder="ค้นหาหัวข้องาน..."
           value={search}
+          autoFocus
           onChange={(e) => setSearch(e.target.value)}
           className="input input- input-bordered flex-1"
         />
@@ -265,7 +288,7 @@ export default function Tasks({ tasks }: TaskListProps) {
                         onClick={() => handleClaimTask(task)}
                         className="btn btn-secondary btn-sm gap-1 w-full hover:scale-105 transition-transform"
                       >
-                        <BiTask /> รับงาน
+                        <BiTask />
                       </Button>
                     )
                   )}
