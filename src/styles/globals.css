@@ -92,3 +92,17 @@ body.smooth-scroll-active #smooth-content {
   min-height: 100%;
   will-change: transform, opacity;
 }
+
+@media screen and (width <= 48rem) {
+  #mobile-menu > ul > li {
+    border-left: 3px solid var(--color-accent-main);
+    padding: 10px 0 10px 15px;
+    margin: 10px 0;
+  }
+
+  #mobile-menu > ul > li:hover {
+    border-left: 5px solid var(--color-accent-main);
+    background-color: var(--color-bg-light);
+    transition: all 0.15s ease-in-out;
+  }
+}
