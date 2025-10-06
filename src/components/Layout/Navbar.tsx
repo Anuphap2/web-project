@@ -77,7 +77,7 @@ export default function Navbar() {
           <Link
             href="/dashboard"
             onClick={handleLinkClick}
-            className="md:hover:text-[#ff8198] transition-colors"
+            className="md:hover:text-[#ff8198] transition-colors block"
           >
             งานทั้งหมดของแผนก
           </Link>
@@ -86,7 +86,7 @@ export default function Navbar() {
           <Link
             href="/addTasks"
             onClick={handleLinkClick}
-            className="md:hover:text-[#ff8198] transition-colors"
+            className="md:hover:text-[#ff8198] transition-colors block"
           >
             เพิ่มงานใหม่
           </Link>
@@ -95,7 +95,7 @@ export default function Navbar() {
           <Link
             href="/listDepart"
             onClick={handleLinkClick}
-            className="md:hover:text-[#ff8198] transition-colors"
+            className="md:hover:text-[#ff8198] transition-colors block"
           >
             รายชื่อพนักงาน
           </Link>
@@ -107,7 +107,7 @@ export default function Navbar() {
           <Link
             href="/home"
             onClick={handleLinkClick}
-            className="md:hover:text-[#ff8198] transition-colors"
+            className="md:hover:text-[#ff8198] transition-colors block"
           >
             หน้าหลัก
           </Link>
@@ -116,7 +116,7 @@ export default function Navbar() {
           <Link
             href="/tasks"
             onClick={handleLinkClick}
-            className="md:hover:text-[#ff8198] transition-colors"
+            className="md:hover:text-[#ff8198] transition-colors block"
           >
             งานของฉัน
           </Link>
